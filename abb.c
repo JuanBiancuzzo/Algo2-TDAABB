@@ -68,7 +68,37 @@ bool arbol_vacio(abb_t* arbol) {
 }
 
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array) {
-    return 0;
+    if (!arbol)
+        return 0;
+
+    if (!tamanio_array)
+        return 0;
+
+    if (arbol_vacio(arbol))
+        return 0;
+
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
+
+    arbol->nodo_raiz = nodo_actual->izquierda;
+    int valor_izquierda = arbol_recorrido_inorden(arbol, array, tamanio_array - 1);
+
+    if (valor_izquierda != 0)
+        tamanio_array--;
+
+    if (!tamanio_array) return 1 + valor_izquierda;
+
+    *(array+valor_izquierda) = arbol_raiz(arbol);
+
+    tamanio_array--;
+    if (!tamanio_array) return 2 +valor_izquierda;
+
+    arbol->nodo_raiz = nodo_actual->derecha;
+    int valor_derecha = arbol_recorrido_inorden(arbol, array, tamanio_array - 1);
+
+    if (valor_derecha)
+        tamanio_array--;
+
+    return 1 + valor_izquierda + valor_derecha;
 }
 
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array) {
