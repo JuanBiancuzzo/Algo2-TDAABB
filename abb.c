@@ -51,14 +51,20 @@ void* arbol_raiz(abb_t* arbol) {
     if (!arbol)
         return NULL;
 
-    if (!arbol->nodo_raiz)
+    if (arbol_vacio(arbol))
         return NULL;
 
     return arbol->nodo_raiz->elemento;
 }
 
 bool arbol_vacio(abb_t* arbol) {
-    return true;
+    if (!arbol)
+        return true;
+
+    if (!arbol->nodo_raiz)
+        return true;
+
+    return false;
 }
 
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array) {
