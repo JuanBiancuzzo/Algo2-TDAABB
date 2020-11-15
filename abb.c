@@ -2,6 +2,8 @@
 
 #include "abb.h"
 
+#define ERROR -1
+#define EXITO 0
 
 abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor) {
 
@@ -28,7 +30,21 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 }
 
 void* arbol_buscar(abb_t* arbol, void* elemento) {
-    return NULL;
+
+    if(!arbol)
+        return NULL;
+
+    if (!arbol->nodo_raiz)
+        return NULL;
+
+    int comparacion = arbol->comparador(arbol->nodo_raiz->elemento, elemento);
+
+    if (comparacion == 0)
+        return arbol->nodo_raiz->elemento;
+
+    arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
+
+    return arbol_buscar(arbol, elemento);
 }
 
 void* arbol_raiz(abb_t* arbol) {
