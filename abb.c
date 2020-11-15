@@ -4,7 +4,19 @@
 
 
 abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor) {
-    return NULL;
+
+    if (!comparador)
+        return NULL;
+
+    abb_t* arbol = calloc(1, sizeof(abb_t));
+
+    if (!arbol)
+        return NULL;
+
+    arbol->comparador = comparador;
+    arbol->destructor = destructor;
+
+    return arbol;
 }
 
 int arbol_insertar(abb_t* arbol, void* elemento) {
