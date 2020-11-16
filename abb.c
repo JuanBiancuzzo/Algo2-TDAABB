@@ -22,7 +22,36 @@ abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor) {
 }
 
 int arbol_insertar(abb_t* arbol, void* elemento) {
-    return 0;
+
+    if (!arbol)
+        return ERROR;
+
+    if (!arbol->nodo_raiz) {
+        nodo_abb_t* nodo = calloc(1, sizeof(nodo_abb_t));
+
+        if (!nodo) return ERROR;
+
+        nodo->elemento = elemento;
+        arbol->nodo_raiz = nodo;
+        return EXITO;
+    }
+
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
+    int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
+
+    arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
+
+    int valor = arbol_insertar(arbol, elemento);
+
+    if (valor == ERROR) return ERROR;
+
+    if (comparacion > 0)
+        nodo_actual->derecha = arbol->nodo_raiz;
+    else nodo_actual->izquierda = arbol->nodo_raiz;
+
+    arbol->nodo_raiz = nodo_actual;
+
+    return EXITO;
 }
 
 int arbol_borrar(abb_t* arbol, void* elemento) {
@@ -37,7 +66,7 @@ void* arbol_buscar(abb_t* arbol, void* elemento) {
     if (!arbol->nodo_raiz)
         return NULL;
 
-    int comparacion = arbol->comparador(arbol_raiz(arbol), elemento);
+    int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
 
     if (comparacion == 0)
         return arbol_raiz(arbol);
