@@ -109,22 +109,20 @@ size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_arra
     return 0;
 }
 
-void arbol_destruir(abb_t* arbol) {
+void arbol_destruir_hojas(abb_t* arbol) {
     if (!arbol)
         return;
 
-    if (arbol_vacio(arbol)) {
-        free(arbol);
+    if (arbol_vacio(arbol))
         return;
-    }
 
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
-    arbol_destruir(arbol);
+    arbol_destruir_hojas(arbol);
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    arbol_destruir(arbol);
+    arbol_destruir_hojas(arbol);
 
     arbol->nodo_raiz = nodo_actual;
 
@@ -132,9 +130,16 @@ void arbol_destruir(abb_t* arbol) {
         arbol->destructor(arbol_raiz(arbol));
 
     free(arbol->nodo_raiz);
-    free(arbol);
+}
 
-    return;
+void arbol_destruir(abb_t* arbol) {
+    if (!arbol)
+        return;
+
+    if (!arbol_vacio(arbol))
+        arbol_destruir_hojas(arbol);
+
+    free(arbol);
 }
 
 size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra) {
