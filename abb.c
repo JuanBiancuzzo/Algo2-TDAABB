@@ -68,7 +68,7 @@ bool arbol_vacio(abb_t* arbol) {
 }
 
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array) {
-    if (!arbol)
+/*    if (!arbol)
         return 0;
 
     if (!tamanio_array)
@@ -98,7 +98,8 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
     if (valor_derecha)
         tamanio_array--;
 
-    return 1 + valor_izquierda + valor_derecha;
+    return 1 + valor_izquierda + valor_derecha; */
+    return 0;
 }
 
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array) {
