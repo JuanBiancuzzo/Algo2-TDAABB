@@ -113,8 +113,10 @@ void arbol_destruir(abb_t* arbol) {
     if (!arbol)
         return;
 
-    if (arbol_vacio(arbol))
+    if (arbol_vacio(arbol)) {
+        free(arbol);
         return;
+    }
 
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
