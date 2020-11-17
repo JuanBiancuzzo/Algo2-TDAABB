@@ -54,7 +54,55 @@ int arbol_insertar(abb_t* arbol, void* elemento) {
     return EXITO;
 }
 
+/*
+ * Devuelve las ramas combinadas, colocando la rama izquierda en el de
+ * la rama derecha
+ */
+nodo_abb_t* combinar_hijos(nodo_abb_t* izquierda, nodo_abb_t* derecha) {
+
+    if (!izquierda) return derecha;
+
+    if (!derecha) return izquierda;
+
+    derecha->izquierda = combinar_hijos(izquierda, derecha->izquierda);
+
+    return derecha;
+}
+
 int arbol_borrar(abb_t* arbol, void* elemento) {
+
+    if (!arbol)
+        return ERROR;
+
+    if (arbol_vacio(arbol))
+        return ERROR;
+
+    int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
+
+    if (comparacion == 0) {
+
+        if (arbol->destructor)
+            arbol->destructor(arbol_raiz(arbol));
+
+        arbol->nodo_raiz = combinar_hijos(arbol->nodo_raiz->izquierda, arbol->nodo_raiz->derecha);
+        free(nodo_actual);
+
+        return EXITO;
+    }
+
+    arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
+
+    int valor = arbol_borrar(arbol, elemento);
+
+    if (valor == ERROR) return ERROR;
+
+    if (comparacion > 0)
+        nodo_actual->derecha = arbol->nodo_raiz;
+    else nodo_actual->izquierda = arbol->nodo_raiz;
+
+    arbol->nodo_raiz = nodo_actual;
+
     return 0;
 }
 
