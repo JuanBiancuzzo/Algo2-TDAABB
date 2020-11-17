@@ -36,8 +36,8 @@ int arbol_insertar(abb_t* arbol, void* elemento) {
         return EXITO;
     }
 
-    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
     int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
 
