@@ -106,6 +106,69 @@ void probar_arbol_insertar () {
 
 }
 
+void probar_arbol_borrar_valores_invalidos () {
+    abb_t* arbol = inicializar_arbol();
+    int elemento = 11;
+
+    pa2m_afirmar(arbol_borrar(NULL, &elemento) == ERROR,
+                 "Detecta correctamente que el arbol es invalido");
+
+    pa2m_afirmar(arbol_borrar(arbol, &elemento) == ERROR,
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_borrar_un_elemento () {
+    abb_t* arbol = inicializar_arbol();
+    int elemento = 11;
+
+    arbol_insertar(arbol, &elemento);
+
+    pa2m_afirmar(arbol_borrar(arbol, &elemento) == EXITO,
+                 "Mensaje de exito al intentar borrar un elemento de un arbol con un elemento");
+
+    pa2m_afirmar(!arbol->nodo_raiz && arbol_vacio(arbol),
+                 "Se borra correctamente el elemento en un arbol con un elemento\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_borrar_varios_elementos () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[12] = {10, 5, 22, 4, 8, 9, 6, 7, 12, 11, 14, 13};
+    int contador = 0, insertar_correcta = EXITO;
+
+    while (contador < 12 && insertar_correcta == EXITO) {
+        insertar_correcta = arbol_insertar(arbol, elementos+contador);
+        contador++;
+    }
+
+    int borrar_correcta = EXITO;
+    contador = 0;
+
+    while (contador < 12 && borrar_correcta == EXITO) {
+        borrar_correcta = arbol_borrar(arbol, elementos+contador);
+        contador++;
+    }
+
+    pa2m_afirmar(borrar_correcta == EXITO,
+                 "Mensaje de exito al borrar todos los elementos del arbol con varios elementos");
+
+    pa2m_afirmar(contador == 12 && arbol_vacio(arbol),
+                 "Se borra correctamente todos elementos en un arbol con varios elementos\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_borrar () {
+
+    probar_arbol_borrar_valores_invalidos();
+    probar_arbol_borrar_un_elemento();
+    probar_arbol_borrar_varios_elementos();
+
+}
+
 int main() {
 
     pa2m_nuevo_grupo("Pruebas crear árbol");
@@ -115,8 +178,8 @@ int main() {
     pa2m_nuevo_grupo("Pruebas insertar y borrar");
     printf(" * Arbol_insertar:\n");
     probar_arbol_insertar();
-    // printf("\n * Arbol_borrar:\n");
-    // probar_arbol_borrar();
+    printf("\n * Arbol_borrar:\n");
+    probar_arbol_borrar();
 
     pa2m_mostrar_reporte();
     return 0;
