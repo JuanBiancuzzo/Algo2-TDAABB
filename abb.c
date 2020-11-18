@@ -82,8 +82,7 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 
     if (comparacion == 0) {
 
-        if (arbol->destructor)
-            arbol->destructor(arbol_raiz(arbol));
+        if (arbol->destructor) arbol->destructor(nodo_actual->elemento);
 
         arbol->nodo_raiz = combinar_hijos(arbol->nodo_raiz->izquierda, arbol->nodo_raiz->derecha);
         free(nodo_actual);
@@ -103,7 +102,7 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 
     arbol->nodo_raiz = nodo_actual;
 
-    return 0;
+    return EXITO;
 }
 
 void* arbol_buscar(abb_t* arbol, void* elemento) {
@@ -144,17 +143,49 @@ bool arbol_vacio(abb_t* arbol) {
     return false;
 }
 
+// es una idea todavia no la veo bien pero bueno
+// size_t (*llamada_recursiva) (abb_t*, void**, size_t) = arbol_recorrido_inorden;
+/*int arbol_recorrer_izquierda(abb_t* arbol, void** array, size_t* tamanio_array, size_t (*llamada_recursiva) (abb_t*, void**, size_t) ) {
+    if (!arbol || !array || llamada_recursiva) return ERROR;
+
+    if (*tamanio_array == 0) return ERROR;
+
+    int valor = llamada_recursiva(arbol, array, *(tamanio_array - 1));
+
+    if (valor != 0) (*tamanio_array)--;
+
+    return tamanio_array == 0 ? ERROR : EXITO;
+}*/
+
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array) {
-    if (!arbol)
-        return 0;
+    if (!arbol || !array) return 0;
 
-    if (!tamanio_array)
-        return 0;
+    if (arbol_vacio(arbol)) return 0;
 
-    if (arbol_vacio(arbol))
-        return 0;
+    if(tamanio_array == 0) return 0;
 
-    return 0;
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
+
+    arbol->nodo_raiz = nodo_actual->izquierda;
+    size_t valor = arbol_recorrido_inorden(arbol, array, tamanio_array--);
+
+    arbol->nodo_raiz = nodo_actual;
+
+
+
+    int numero = *(int*)(arbol_raiz(arbol));
+    array[numero - 1] = arbol_raiz(arbol); // esto esta mal
+
+
+
+    if (tamanio_array - valor < 1)
+        return tamanio_array;
+    else tamanio_array -= valor;
+
+    arbol->nodo_raiz = nodo_actual->derecha;
+    size_t valor_dos = arbol_recorrido_inorden(arbol, array, tamanio_array--);
+
+    return 1 + valor + valor_dos;
 }
 
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array) {

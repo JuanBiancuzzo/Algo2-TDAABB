@@ -136,26 +136,31 @@ void probar_arbol_borrar_un_elemento () {
 
 void probar_arbol_borrar_varios_elementos () {
     abb_t* arbol = inicializar_arbol();
-    int elementos[12] = {10, 5, 22, 4, 8, 9, 6, 7, 12, 11, 14, 13};
-    int contador = 0, insertar_correcta = EXITO;
+    int contador = 0, cantidad = 7;
 
-    while (contador < 12 && insertar_correcta == EXITO) {
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    int insertar_correcta = EXITO;
+
+    while (contador < cantidad && insertar_correcta == EXITO) {
         insertar_correcta = arbol_insertar(arbol, elementos+contador);
         contador++;
     }
 
+    int orden[7] = {7, 6, 2, 4, 3, 1, 5};
     int borrar_correcta = EXITO;
     contador = 0;
 
-    while (contador < 12 && borrar_correcta == EXITO) {
-        borrar_correcta = arbol_borrar(arbol, elementos+contador);
+    while (contador < cantidad && borrar_correcta == EXITO) {
+        // printf("eliminar %i, raiz %i - ", orden[contador], *(int*)arbol->nodo_raiz->elemento);
+        borrar_correcta = arbol_borrar(arbol, orden+contador);
+        // printf("return %i\n", borrar_correcta);
         contador++;
     }
 
     pa2m_afirmar(borrar_correcta == EXITO,
                  "Mensaje de exito al borrar todos los elementos del arbol con varios elementos");
 
-    pa2m_afirmar(contador == 12 && arbol_vacio(arbol),
+    pa2m_afirmar(contador == cantidad && arbol_vacio(arbol),
                  "Se borra correctamente todos elementos en un arbol con varios elementos\n");
 
     arbol_destruir(arbol);
@@ -166,6 +171,52 @@ void probar_arbol_borrar () {
     probar_arbol_borrar_valores_invalidos();
     probar_arbol_borrar_un_elemento();
     probar_arbol_borrar_varios_elementos();
+
+}
+
+void probar_arbol_recorrido_inorden_valores_invalidos () {
+    abb_t* arbol = inicializar_arbol();
+    int array[10];
+    size_t cantidad = 10;
+
+    pa2m_afirmar(arbol_recorrido_inorden(NULL, (void**)&array, cantidad) == 0,
+                 "Detecta correctamente que el arbol es invalido");
+
+    pa2m_afirmar(arbol_recorrido_inorden(arbol, NULL, cantidad) == 0,
+                 "Detecta correctamente que el array es invalido");
+
+    pa2m_afirmar(arbol_recorrido_inorden(arbol, (void**)&array, cantidad) == 0,
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_recorrido_inorden_array_mayor_arbol () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    int cantidad = 7;
+
+    for (int i = 0; i < cantidad; i++)
+        arbol_insertar(arbol, elementos+i);
+
+    int* array[9];
+    size_t tamanio_array = 7;
+
+    size_t recorridos = arbol_recorrido_inorden(arbol, (void**)array, tamanio_array);
+
+    printf("%i\n", (int) recorridos);
+
+    for (size_t i = 0; i < recorridos; i++)
+        printf("%i %s", *array[i], (i + 1) < recorridos ? "- " : " ");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_recorrido_inorden () {
+
+    probar_arbol_recorrido_inorden_valores_invalidos();
+    probar_arbol_recorrido_inorden_array_mayor_arbol();
+    // probar_arbol_recorrido_inorden_array_menor_arbol();
 
 }
 
@@ -180,6 +231,13 @@ int main() {
     probar_arbol_insertar();
     printf("\n * Arbol_borrar:\n");
     probar_arbol_borrar();
+
+    //pa2m_nuevo_grupo("Pruebas herramientas");
+    //printf(" * Arbol_insertar:\n");
+
+    pa2m_nuevo_grupo("Pruebas Recorridos");
+    printf(" * Arbol_recorrido_inorden:\n");
+    probar_arbol_recorrido_inorden();
 
     pa2m_mostrar_reporte();
     return 0;
