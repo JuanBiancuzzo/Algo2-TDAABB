@@ -175,16 +175,29 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
 }
 
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array) {
-     if (!arbol)
-        return 0;
+    if (!arbol || !array) return 0;
 
-    if (!tamanio_array)
-        return 0;
+    if (arbol_vacio(arbol)) return 0;
 
-    if (arbol_vacio(arbol))
-        return 0;
+    if(tamanio_array == 0) return 0;
 
-    return 0;
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
+
+    printf("%i ", *(int*)arbol_raiz(arbol));
+    array[tamanio_array - 3] = arbol_raiz(arbol); // esto esta mal
+
+    arbol->nodo_raiz = nodo_actual->izquierda;
+    size_t valor = arbol_recorrido_preorden(arbol, array, tamanio_array-1);
+
+    if (tamanio_array - valor < 1)
+        return tamanio_array;
+    else tamanio_array -= valor;
+
+    arbol->nodo_raiz = nodo_actual->derecha;
+    size_t valor_dos = arbol_recorrido_preorden(arbol, array, tamanio_array-1);
+
+    arbol->nodo_raiz = nodo_actual;
+    return 1 + valor + valor_dos;
 }
 
 size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_array) {
