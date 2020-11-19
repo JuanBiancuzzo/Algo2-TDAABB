@@ -143,20 +143,7 @@ bool arbol_vacio(abb_t* arbol) {
     return false;
 }
 
-// es una idea todavia no la veo bien pero bueno
-// size_t (*llamada_recursiva) (abb_t*, void**, size_t) = arbol_recorrido_inorden;
-/*int arbol_recorrer_izquierda(abb_t* arbol, void** array, size_t* tamanio_array, size_t (*llamada_recursiva) (abb_t*, void**, size_t) ) {
-    if (!arbol || !array || llamada_recursiva) return ERROR;
-
-    if (*tamanio_array == 0) return ERROR;
-
-    int valor = llamada_recursiva(arbol, array, *(tamanio_array - 1));
-
-    if (valor != 0) (*tamanio_array)--;
-
-    return tamanio_array == 0 ? ERROR : EXITO;
-}*/
-
+// int numero = *(int*)arbol_raiz(arbol);
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array) {
     if (!arbol || !array) return 0;
 
@@ -167,24 +154,19 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
-    size_t valor = arbol_recorrido_inorden(arbol, array, tamanio_array--);
+    size_t valor = arbol_recorrido_inorden(arbol, array, tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
-
-
-
-    int numero = *(int*)(arbol_raiz(arbol));
-    array[numero - 1] = arbol_raiz(arbol); // esto esta mal
-
-
+    array[tamanio_array - 1] = arbol_raiz(arbol); // esto esta mal
 
     if (tamanio_array - valor < 1)
         return tamanio_array;
     else tamanio_array -= valor;
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_inorden(arbol, array, tamanio_array--);
+    size_t valor_dos = arbol_recorrido_inorden(arbol, array, tamanio_array-1);
 
+    arbol->nodo_raiz = nodo_actual;
     return 1 + valor + valor_dos;
 }
 
