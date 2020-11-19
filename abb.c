@@ -113,6 +113,7 @@ void* arbol_buscar(abb_t* arbol, void* elemento) {
     if (!arbol->nodo_raiz)
         return NULL;
 
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
     int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
 
     if (comparacion == 0)
@@ -120,7 +121,10 @@ void* arbol_buscar(abb_t* arbol, void* elemento) {
 
     arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
 
-    return arbol_buscar(arbol, elemento);
+    void* valor = arbol_buscar(arbol, elemento);
+    arbol->nodo_raiz = nodo_actual;
+
+    return valor;
 }
 
 void* arbol_raiz(abb_t* arbol) {
