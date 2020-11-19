@@ -220,6 +220,52 @@ void probar_arbol_recorrido_inorden () {
 
 }
 
+void probar_arbol_recorrido_preorden_valores_invalidos () {
+    abb_t* arbol = inicializar_arbol();
+    int array[10];
+    size_t cantidad = 10;
+
+    pa2m_afirmar(arbol_recorrido_preorden(NULL, (void**)&array, cantidad) == 0,
+                 "Detecta correctamente que el arbol es invalido");
+
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, NULL, cantidad) == 0,
+                 "Detecta correctamente que el array es invalido");
+
+    pa2m_afirmar(arbol_recorrido_preorden(arbol, (void**)&array, cantidad) == 0,
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_recorrido_preorden_array_mayor_arbol () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {1, 2, 3, 4, 5, 6, 7};
+    int cantidad = 7;
+
+    for (int i = 0; i < cantidad; i++)
+        arbol_insertar(arbol, elementos+i);
+
+    int* array[9];
+    size_t tamanio_array = 9;
+
+    size_t recorridos = arbol_recorrido_preorden(arbol, (void**)array, tamanio_array);
+    printf("\n%i\n", (int) recorridos);
+/*
+    printf("\n");
+    for (size_t i = 0; i < recorridos; i++)
+        printf("%i %s", *array[i], (i + 1) < recorridos ? "- " : " ");
+*/
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_recorrido_preorden () {
+
+    probar_arbol_recorrido_preorden_valores_invalidos();
+    probar_arbol_recorrido_preorden_array_mayor_arbol();
+    // probar_arbol_recorrido_preorden_array_menor_arbol();
+
+}
+
 int main() {
 
     pa2m_nuevo_grupo("Pruebas crear árbol");
@@ -238,6 +284,8 @@ int main() {
     pa2m_nuevo_grupo("Pruebas Recorridos");
     printf(" * Arbol_recorrido_inorden:\n");
     probar_arbol_recorrido_inorden();
+    printf("\n * Arbol_recorrido_preorden:\n");
+    probar_arbol_recorrido_preorden();
 
     pa2m_mostrar_reporte();
     return 0;
