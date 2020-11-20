@@ -257,15 +257,26 @@ void probar_arbol_recorrido_preorden_array_mayor_arbol () {
         arbol_insertar(arbol, elementos+i);
 
     int* array[9];
-    size_t tamanio_array = 9;
+    size_t tamanio_array = 11;
 
     size_t recorridos = arbol_recorrido_preorden(arbol, (void**)array, tamanio_array);
-    printf("\n%i\n", (int) recorridos);
-/*
-    printf("\n");
-    for (size_t i = 0; i < recorridos; i++)
-        printf("%i %s", *array[i], (i + 1) < recorridos ? "- " : " ");
-*/
+
+    pa2m_afirmar((int)recorridos == cantidad,
+                 "Devuelve la cantidad correcta de elementos");
+
+    size_t contador = 0;
+    bool preorden = true;
+
+    while (contador+1  < recorridos && preorden) {
+
+        if (*(int*)(array[contador])+1 != *(int*)(array[contador+1]))
+            preorden = false;
+        contador++;
+    }
+
+    pa2m_afirmar(preorden,
+                 "Se recorre correctamente el arbol con un array mayor que el arbol\n");
+
     arbol_destruir(arbol);
 }
 
