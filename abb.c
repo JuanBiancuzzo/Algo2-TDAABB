@@ -147,7 +147,6 @@ bool arbol_vacio(abb_t* arbol) {
     return false;
 }
 
-// int numero = *(int*)arbol_raiz(arbol);
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array) {
     if (!arbol || !array) return 0;
 
@@ -161,14 +160,14 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
     size_t valor = arbol_recorrido_inorden(arbol, array, tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
-    array[tamanio_array - 1] = arbol_raiz(arbol); // esto esta mal
+    *(array+valor) = arbol_raiz(arbol);
 
     if (tamanio_array - valor < 1)
         return tamanio_array;
     else tamanio_array -= valor;
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_inorden(arbol, array, tamanio_array-1);
+    size_t valor_dos = arbol_recorrido_inorden(arbol, array+(valor+1), tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
     return 1 + valor + valor_dos;
