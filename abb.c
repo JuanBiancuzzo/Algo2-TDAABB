@@ -244,9 +244,7 @@ void arbol_destruir_hojas(abb_t* arbol) {
 
     arbol->nodo_raiz = nodo_actual;
 
-    if (arbol->destructor)
-        arbol->destructor(arbol_raiz(arbol));
-
+    if (arbol->destructor) arbol->destructor(arbol_raiz(arbol));
     free(arbol->nodo_raiz);
 }
 
