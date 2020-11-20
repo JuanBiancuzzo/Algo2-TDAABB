@@ -407,8 +407,8 @@ int main() {
     printf("\n * Arbol_borrar:\n");
     probar_arbol_borrar();
 
-    //pa2m_nuevo_grupo("Pruebas herramientas");
-    //printf(" * Arbol_insertar:\n");
+    pa2m_nuevo_grupo("Pruebas herramientas");
+    printf(" * Arbol_insertar:\n");
 
     pa2m_nuevo_grupo("Pruebas Recorridos");
     printf(" * Arbol_recorrido_inorden:\n");
