@@ -55,18 +55,19 @@ int arbol_insertar(abb_t* arbol, void* elemento) {
 }
 
 /*
- * Devuelve las ramas combinadas, colocando la rama izquierda en el de
- * la rama derecha
+ * Devuelve el nodo que se encuentra totalmente a la derecha
  */
-nodo_abb_t* combinar_hijos(nodo_abb_t* izquierda, nodo_abb_t* derecha) {
+nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
+    if (!nodo) return NULL;
 
-    if (!izquierda) return derecha;
+    nodo_abb_t* nodo_aux = predecesor_inorder(nodo->derecha);
 
-    if (!derecha) return izquierda;
+    if (!nodo_aux) return nodo;
 
-    derecha->izquierda = combinar_hijos(izquierda, derecha->izquierda);
+    if (nodo->derecha == nodo_aux)
+        nodo->derecha = nodo_aux->izquierda;
 
-    return derecha;
+    return nodo_aux;
 }
 
 int arbol_borrar(abb_t* arbol, void* elemento) {
@@ -82,9 +83,19 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 
     if (comparacion == 0) {
 
-        if (arbol->destructor) arbol->destructor(nodo_actual->elemento);
+        nodo_abb_t* predecesor = predecesor_inorder(nodo_actual->izquierda);
 
-        arbol->nodo_raiz = combinar_hijos(arbol->nodo_raiz->izquierda, arbol->nodo_raiz->derecha);
+        if (predecesor) {
+            predecesor->derecha = nodo_actual->derecha;
+            if (predecesor != nodo_actual->izquierda)
+                predecesor->izquierda = nodo_actual->izquierda;
+        } else {
+            predecesor = nodo_actual->izquierda ? nodo_actual->izquierda : nodo_actual->derecha;
+        }
+
+        arbol->nodo_raiz = predecesor;
+
+        if (arbol->destructor) arbol->destructor(nodo_actual->elemento);
         free(nodo_actual);
 
         return EXITO;
