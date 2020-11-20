@@ -307,7 +307,7 @@ void probar_arbol_recorrido_postorden_valores_invalidos () {
 
 void probar_arbol_recorrido_postorden_array_mayor_arbol () {
     abb_t* arbol = inicializar_arbol();
-    int elementos[7] = {6, 3, 7, 1, 2, 4, 5};
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
     int cantidad = 7;
 
     for (int i = 0; i < cantidad; i++)
@@ -317,12 +317,24 @@ void probar_arbol_recorrido_postorden_array_mayor_arbol () {
     size_t tamanio_array = 9;
 
     size_t recorridos = arbol_recorrido_postorden(arbol, (void**)array, tamanio_array);
-    printf("\n%i\n", (int) recorridos);
-/*
-    printf("\n");
-    for (size_t i = 0; i < recorridos; i++)
-        printf("%i %s", *array[i], (i + 1) < recorridos ? "- " : " ");
-*/
+
+    pa2m_afirmar((int)recorridos == cantidad,
+                 "Devuelve la cantidad correcta de elementos");
+
+    int elementos_esperados[7] = {1, 3, 2, 5, 7, 6, 4};
+    bool postorden = true;
+    size_t contador = 0;
+
+    while (contador < recorridos && postorden) {
+
+        if (*(int*)array[contador] != elementos_esperados[contador])
+            postorden = false;
+        contador++;
+    }
+
+    pa2m_afirmar(postorden,
+                 "Se recorre correctamente el arbol con un array mayor que el arbol\n");
+
     arbol_destruir(arbol);
 }
 
