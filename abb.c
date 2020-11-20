@@ -270,7 +270,6 @@ size_t abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), voi
     return 1 + valor + valor_dos;
 }
 
-// mal
 size_t abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
     if (!nodo || !funcion) return 0;
 
@@ -283,7 +282,6 @@ size_t abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), vo
     return 1 + valor + valor_dos;
 }
 
-// mal
 size_t abb_iterador_postorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
     if (!nodo || !funcion) return 0;
 
