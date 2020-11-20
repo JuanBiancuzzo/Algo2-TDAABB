@@ -58,15 +58,13 @@ int arbol_insertar(abb_t* arbol, void* elemento) {
  * Devuelve el nodo que se encuentra totalmente a la derecha
  */
 nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
-    if (!nodo) return NULL;
+    if (!nodo->derecha)
+        return nodo;
 
     nodo_abb_t* nodo_aux = predecesor_inorder(nodo->derecha);
 
-    if (!nodo_aux) return nodo;
-
     if (nodo->derecha == nodo_aux)
         nodo->derecha = nodo_aux->izquierda;
-
     return nodo_aux;
 }
 
@@ -83,9 +81,12 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 
     if (comparacion == 0) {
 
-        nodo_abb_t* predecesor = predecesor_inorder(nodo_actual->izquierda);
+        nodo_abb_t* predecesor;
 
-        if (predecesor) {
+        if (nodo_actual->derecha && nodo_actual->izquierda) {
+
+            predecesor = predecesor_inorder(nodo_actual->izquierda);
+
             predecesor->derecha = nodo_actual->derecha;
             if (predecesor != nodo_actual->izquierda)
                 predecesor->izquierda = nodo_actual->izquierda;
