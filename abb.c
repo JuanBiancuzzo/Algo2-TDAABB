@@ -81,20 +81,16 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 
     if (comparacion == 0) {
 
-        nodo_abb_t* predecesor;
-
         if (nodo_actual->derecha && nodo_actual->izquierda) {
 
-            predecesor = predecesor_inorder(nodo_actual->izquierda);
+            arbol->nodo_raiz = predecesor_inorder(nodo_actual->izquierda);
 
-            predecesor->derecha = nodo_actual->derecha;
-            if (predecesor != nodo_actual->izquierda)
-                predecesor->izquierda = nodo_actual->izquierda;
+            arbol->nodo_raiz->derecha = nodo_actual->derecha;
+            if (arbol->nodo_raiz != nodo_actual->izquierda)
+                arbol->nodo_raiz->izquierda = nodo_actual->izquierda;
         } else {
-            predecesor = nodo_actual->izquierda ? nodo_actual->izquierda : nodo_actual->derecha;
+            arbol->nodo_raiz = nodo_actual->izquierda ? nodo_actual->izquierda : nodo_actual->derecha;
         }
-
-        arbol->nodo_raiz = predecesor;
 
         if (arbol->destructor) arbol->destructor(nodo_actual->elemento);
         free(nodo_actual);
