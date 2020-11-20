@@ -346,6 +346,55 @@ void probar_arbol_recorrido_postorden () {
 
 }
 
+bool iterador_avanzar (void* elemento, void* extra) {
+    printf("%i ", *(int*)elemento);
+    extra = extra;
+    return false;
+}
+
+void probar_iterador_interno_valores_invalidos () {
+
+    abb_t* arbol = inicializar_arbol();
+    bool (*funcion) (void*, void*) = iterador_avanzar;
+
+    pa2m_afirmar(abb_con_cada_elemento(NULL, ABB_RECORRER_INORDEN, funcion, NULL) == 0,
+                 "Detecta correctamente que el arbol es invalido");
+
+    pa2m_afirmar(abb_con_cada_elemento(arbol, 3, funcion, NULL) == 0,
+                 "Detecta correctamente que el recorrido es invalido");
+
+    pa2m_afirmar(abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, NULL, NULL) == 0,
+                 "Detecta correctamente que la funcion es invalida");
+
+    pa2m_afirmar(abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, NULL) == 0,
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+    // size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra)
+
+void probar_iterador_interno_recorrido_inorden () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[15] = {8, 4, 12, 2, 6, 14, 1, 3, 5, 7, 13};
+    bool (*funcion) (void*, void*) = iterador_avanzar;
+
+    for (int i = 0; i < 11; i++)
+        arbol_insertar(arbol, elementos+i);
+
+    abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, funcion, NULL);
+
+    arbol_destruir(arbol);
+}
+
+void probar_iterador_interno () {
+
+    probar_iterador_interno_valores_invalidos();
+    probar_iterador_interno_recorrido_inorden();
+    //probar_iterador_interno_recorrido_preorden();
+    //probar_iterador_interno_recorrido_postorden();
+
+}
+
 int main() {
 
     pa2m_nuevo_grupo("Pruebas crear árbol");
@@ -368,6 +417,11 @@ int main() {
     probar_arbol_recorrido_preorden();
     printf("\n * Arbol_recorrido_postorden:\n");
     probar_arbol_recorrido_postorden();
+
+    pa2m_nuevo_grupo("Pruebas iterador interno");
+    printf(" * Arbol_con_cada_elemento:\n");
+    probar_iterador_interno();
+
 
     pa2m_mostrar_reporte();
     return 0;
