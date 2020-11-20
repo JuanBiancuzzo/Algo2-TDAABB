@@ -151,9 +151,7 @@ void probar_arbol_borrar_varios_elementos () {
     contador = 0;
 
     while (contador < cantidad && borrar_correcta == EXITO) {
-        // printf("eliminar %i, raiz %i - ", orden[contador], *(int*)arbol->nodo_raiz->elemento);
         borrar_correcta = arbol_borrar(arbol, orden+contador);
-        // printf("return %i\n", borrar_correcta);
         contador++;
     }
 
