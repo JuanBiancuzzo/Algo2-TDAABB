@@ -215,16 +215,18 @@ size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_arra
     else tamanio_array -= valor;
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_postorden(arbol, array, tamanio_array-1);
+    size_t valor_dos = arbol_recorrido_postorden(arbol, array+valor, tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
-    array[tamanio_array - 3] = arbol_raiz(arbol); // esto esta mal
-
-    printf("%i ", *(int*)arbol_raiz(arbol));
+    *(array+(valor+valor_dos)) = arbol_raiz(arbol);
 
     return 1 + valor + valor_dos;
 }
 
+/*
+ * Dado un arbol lo recorre de abajo hacia arriba destruyendo (si tiene destructor)
+ * cada hoja y liberandola, hasta dejar el arbol vacio
+ */
 void arbol_destruir_hojas(abb_t* arbol) {
     if (!arbol)
         return;
