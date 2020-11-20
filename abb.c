@@ -258,6 +258,60 @@ void arbol_destruir(abb_t* arbol) {
     free(arbol);
 }
 
+size_t abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
+    if (!nodo || !funcion) return 0;
+
+    size_t valor = abb_iterador_inorden(nodo->izquierda, funcion, extra);
+
+    if (funcion(nodo->elemento, extra)) return 0;
+
+    size_t valor_dos = abb_iterador_inorden(nodo->derecha, funcion, extra);
+    
+    return 1 + valor + valor_dos;
+}
+
+// mal
+size_t abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
+    if (!nodo || !funcion) return 0;
+
+    if (funcion(nodo->elemento, extra)) return 0;
+
+    size_t valor = abb_iterador_preorden(nodo->izquierda, funcion, extra);
+
+    size_t valor_dos = abb_iterador_preorden(nodo->derecha, funcion, extra);
+
+    return 1 + valor + valor_dos;
+}
+
+// mal
+size_t abb_iterador_postorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
+    if (!nodo || !funcion) return 0;
+
+    size_t valor = 0, valor_dos = 0;
+
+    if (nodo->izquierda)
+        valor = abb_iterador_postorden(nodo->izquierda, funcion, extra);
+
+    if (nodo->derecha)
+        valor_dos = abb_iterador_postorden(nodo->derecha, funcion, extra);
+
+    if (funcion(nodo->elemento, extra)) return 0;
+
+    return 1 + valor + valor_dos;
+}
+
 size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra) {
+
+    if (!arbol || !funcion) return 0;
+
+    if (recorrido == ABB_RECORRER_INORDEN)
+        return abb_iterador_inorden(arbol->nodo_raiz, funcion, extra);
+
+    if (recorrido == ABB_RECORRER_PREORDEN)
+        return abb_iterador_preorden(arbol->nodo_raiz, funcion, extra);
+
+    if (recorrido == ABB_RECORRER_POSTORDEN)
+        return abb_iterador_postorden(arbol->nodo_raiz, funcion, extra);
+
     return 0;
 }
