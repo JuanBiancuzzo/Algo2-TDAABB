@@ -345,7 +345,7 @@ void probar_arbol_recorrido_postorden () {
 }
 
 bool iterador_avanzar (void* elemento, void* extra) {
-    printf("%i ", *(int*)elemento);
+    elemento = elemento;
     extra = extra;
     return false;
 }
@@ -369,7 +369,6 @@ void probar_iterador_interno_valores_invalidos () {
 
     arbol_destruir(arbol);
 }
-    // size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra)
 
 void probar_iterador_interno_recorrido_inorden () {
     abb_t* arbol = inicializar_arbol();
