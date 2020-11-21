@@ -61,11 +61,8 @@ nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
     if (!nodo->derecha)
         return nodo;
 
-    nodo_abb_t* nodo_aux = predecesor_inorder(nodo->derecha);
+    return predecesor_inorder(nodo->derecha);
 
-    if (nodo->derecha == nodo_aux)
-        nodo->derecha = nodo_aux->izquierda;
-    return nodo_aux;
 }
 
 int arbol_borrar(abb_t* arbol, void* elemento) {
