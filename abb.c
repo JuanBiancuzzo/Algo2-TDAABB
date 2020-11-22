@@ -62,7 +62,6 @@ nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
         return nodo;
 
     return predecesor_inorder(nodo->derecha);
-
 }
 
 int arbol_borrar(abb_t* arbol, void* elemento) {
