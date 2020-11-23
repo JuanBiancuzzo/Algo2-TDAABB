@@ -172,6 +172,16 @@ void probar_arbol_borrar () {
 
 }
 
+size_t insertar_n_valores (abb_t* arbol, int array[], size_t cantidad) {
+    size_t insertados = 0;
+    for (size_t i = 0; i < cantidad; i++) {
+        int resultado = arbol_insertar(arbol, array+i);
+        if (resultado == EXITO)
+            insertados++;
+    }
+    return insertados;
+}
+
 void probar_arbol_recorrido_inorden_valores_invalidos () {
     abb_t* arbol = inicializar_arbol();
     int array[10];
