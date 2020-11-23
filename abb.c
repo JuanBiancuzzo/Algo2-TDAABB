@@ -64,7 +64,7 @@ nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
     return predecesor_inorder(nodo->derecha);
 }
 
-nodo_abb_t* remplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo) {
+nodo_abb_t* reemplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo) {
     if (!rama->derecha)
         return predecesor_hijo;
 
@@ -87,7 +87,7 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
         if (nodo_actual->derecha && nodo_actual->izquierda) {
 
             arbol->nodo_raiz = predecesor_inorder(nodo_actual->izquierda);
-            arbol->nodo_raiz->izquierda = remplazar_predecesor(nodo_actual->izquierda, arbol->nodo_raiz->izquierda);
+            arbol->nodo_raiz->izquierda = reemplazar_predecesor(nodo_actual->izquierda, arbol->nodo_raiz->izquierda);
             arbol->nodo_raiz->derecha = nodo_actual->derecha;
 
         } else {
