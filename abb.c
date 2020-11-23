@@ -64,6 +64,10 @@ nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
     return predecesor_inorder(nodo->derecha);
 }
 
+/*
+ * Devuelve la rama izquierda, con el hijo izquierdo del predecesor
+ * en el extremo derecho de la rama
+*/
 nodo_abb_t* reemplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo) {
     if (!rama->derecha)
         return predecesor_hijo;
