@@ -201,19 +201,16 @@ void probar_arbol_recorrido_inorden_valores_invalidos () {
 
 void probar_arbol_recorrido_inorden_array_mayor_arbol () {
     abb_t* arbol = inicializar_arbol();
-    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
-    int cantidad = 7;
-
-    for (int i = 0; i < cantidad; i++)
-        arbol_insertar(arbol, elementos+i);
+    int elementos [7] = {4, 2, 6, 1, 3, 5, 7};
+    size_t cantidad = insertar_n_valores (arbol, elementos, 7);
 
     int* array[9];
     size_t tamanio_array = 9;
 
     size_t recorridos = arbol_recorrido_inorden(arbol, (void**)array, tamanio_array);
 
-    pa2m_afirmar((int)recorridos == cantidad,
-                 "Devuelve la cantidad correcta de elementos");
+    pa2m_afirmar(recorridos == cantidad,
+                 "Devuelve la cantidad correcta de elementos en un recorrido más largo que el arbol");
 
     size_t contador = 0;
     bool inorden = true;
@@ -231,11 +228,40 @@ void probar_arbol_recorrido_inorden_array_mayor_arbol () {
     arbol_destruir(arbol);
 }
 
+void probar_arbol_recorrido_inorden_array_menor_arbol () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos [7] = {4, 2, 6, 1, 3, 5, 7};
+    insertar_n_valores (arbol, elementos, 7);
+
+    int* array[9];
+    size_t tamanio_array = 4;
+
+    size_t recorridos = arbol_recorrido_inorden(arbol, (void**)array, tamanio_array);
+
+    pa2m_afirmar(recorridos == tamanio_array,
+                    "Devuelve la cantidad correcta de elementos en un recorrido más corto que el arbol");
+
+    size_t contador = 0;
+    bool inorden = true;
+
+    while (contador+1  < recorridos && inorden) {
+
+        if (*(int*)(array[contador])+1 != *(int*)(array[contador+1]))
+            inorden = false;
+        contador++;
+    }
+
+    pa2m_afirmar(inorden,
+                    "Se recorre correctamente el arbol con un array mayor que el arbol\n");
+
+    arbol_destruir(arbol);
+}
+
 void probar_arbol_recorrido_inorden () {
 
     probar_arbol_recorrido_inorden_valores_invalidos();
     probar_arbol_recorrido_inorden_array_mayor_arbol();
-    // probar_arbol_recorrido_inorden_array_menor_arbol();
+    probar_arbol_recorrido_inorden_array_menor_arbol();
 
 }
 
