@@ -65,8 +65,6 @@ nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
 }
 
 nodo_abb_t* remplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo) {
-    if (!predecesor_hijo) return rama;
-
     if (!rama->derecha)
         return predecesor_hijo;
 
@@ -77,11 +75,9 @@ nodo_abb_t* remplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo) 
 
 int arbol_borrar(abb_t* arbol, void* elemento) {
 
-    if (!arbol)
-        return ERROR;
+    if (!arbol) return ERROR;
 
-    if (arbol_vacio(arbol))
-        return ERROR;
+    if (arbol_vacio(arbol)) return ERROR;
 
     int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
@@ -91,7 +87,6 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
         if (nodo_actual->derecha && nodo_actual->izquierda) {
 
             arbol->nodo_raiz = predecesor_inorder(nodo_actual->izquierda);
-
             arbol->nodo_raiz->izquierda = remplazar_predecesor(nodo_actual->izquierda, arbol->nodo_raiz->izquierda);
             arbol->nodo_raiz->derecha = nodo_actual->derecha;
 
@@ -107,9 +102,7 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
 
     arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
 
-    int valor = arbol_borrar(arbol, elemento);
-
-    if (valor == ERROR) return ERROR;
+    if (arbol_borrar(arbol, elemento) == ERROR) return ERROR;
 
     if (comparacion > 0)
         nodo_actual->derecha = arbol->nodo_raiz;
