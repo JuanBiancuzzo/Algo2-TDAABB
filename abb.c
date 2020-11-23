@@ -68,8 +68,7 @@ nodo_abb_t* reemplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo)
     if (!rama->derecha)
         return predecesor_hijo;
 
-    rama->derecha = remplazar_predecesor(rama->derecha, predecesor_hijo);
-
+    rama->derecha = reemplazar_predecesor(rama->derecha, predecesor_hijo);
     return rama;
 }
 
