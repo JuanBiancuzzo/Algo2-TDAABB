@@ -182,6 +182,59 @@ size_t insertar_n_valores (abb_t* arbol, int array[], size_t cantidad) {
     return insertados;
 }
 
+void probar_arbol_buscar_valores_invalidos () {
+    abb_t* arbol = inicializar_arbol();
+    int key = 4;
+
+    pa2m_afirmar(arbol_buscar(NULL, &key) == NULL,
+                 "Detecta correctamente que el arbol es invalido");
+
+    pa2m_afirmar(arbol_buscar(arbol, &key) == NULL,
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_buscar_key_en_arbol () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    insertar_n_valores(arbol, elementos, 7);
+
+    int key = 4;
+    pa2m_afirmar(*(int*)arbol_buscar(arbol, &key) == 4,
+                 "Encuentra correctamente la raiz del arbol");
+
+    key = 7;
+    pa2m_afirmar(*(int*)arbol_buscar(arbol, &key) == 7,
+                 "Encuentra correctamente una hoja del arbol");
+
+    key = 2;
+    pa2m_afirmar(*(int*)arbol_buscar(arbol, &key) == 2,
+                 "Encuentra correctamente un nodo que no es raiz, ni hoja\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_buscar_key_invalido () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    insertar_n_valores(arbol, elementos, 7);
+
+    int key = 8;
+    pa2m_afirmar(arbol_buscar(arbol, &key) == NULL,
+                 "Reconoce correctamente que no hay elemento que no esta en el arbol\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_buscar () {
+
+    probar_arbol_buscar_valores_invalidos();
+    probar_arbol_buscar_key_en_arbol();
+    probar_arbol_buscar_key_invalido();
+
+}
+
 void probar_arbol_recorrido_inorden_valores_invalidos () {
     abb_t* arbol = inicializar_arbol();
     int array[10];
@@ -494,7 +547,8 @@ int main() {
     probar_arbol_borrar();
 
     pa2m_nuevo_grupo("Pruebas herramientas");
-    printf(" * Arbol_insertar:\n");
+    printf(" * Arbol_buscar:\n");
+    probar_arbol_buscar();
 
     pa2m_nuevo_grupo("Pruebas Recorridos");
     printf(" * Arbol_recorrido_inorden:\n");
