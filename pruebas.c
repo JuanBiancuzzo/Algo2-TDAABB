@@ -278,7 +278,35 @@ void probar_arbol_raiz () {
 
 }
 
+void probar_arbol_vacio_valores_invalidos () {
+    abb_t* arbol = inicializar_arbol();
 
+    pa2m_afirmar(arbol_vacio(NULL),
+                 "Detecta correctamente que el arbol es invalido y por ende vacio");
+
+    pa2m_afirmar(arbol_vacio(arbol),
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_vacio_arbol_varios_nodos() {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    insertar_n_valores(arbol, elementos, 7);
+
+    pa2m_afirmar(!arbol_vacio(arbol),
+                 "Detecta correctamente que el arbol no esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_vacio () {
+
+    probar_arbol_vacio_valores_invalidos();
+    probar_arbol_vacio_arbol_varios_nodos();
+
+}
 
 void probar_arbol_recorrido_inorden_valores_invalidos () {
     abb_t* arbol = inicializar_arbol();
@@ -596,6 +624,8 @@ int main() {
     probar_arbol_buscar();
     printf("\n * Arbol_raiz:\n");
     probar_arbol_raiz();
+    printf("\n * Arbol_vacio:\n");
+    probar_arbol_vacio();
 
     pa2m_nuevo_grupo("Pruebas Recorridos");
     printf(" * Arbol_recorrido_inorden:\n");
