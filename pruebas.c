@@ -235,6 +235,51 @@ void probar_arbol_buscar () {
 
 }
 
+void probar_arbol_raiz_valores_invalidos () {
+    abb_t* arbol = inicializar_arbol();
+
+    pa2m_afirmar(arbol_raiz(NULL) == NULL,
+                 "Detecta correctamente que el arbol es invalido");
+
+    pa2m_afirmar(arbol_raiz(arbol) == NULL,
+                 "Detecta correctamente que el arbol esta vacio\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_raiz_arbol_un_nodo() {
+    abb_t* arbol = inicializar_arbol();
+    int elemento = 11;
+
+    arbol_insertar(arbol, &elemento);
+
+    pa2m_afirmar(*(int*)arbol_raiz(arbol) == elemento,
+                 "Reconoce correctamente la raiz con un arbol de un nodo\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_raiz_arbol_varios_nodos() {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    insertar_n_valores(arbol, elementos, 7);
+
+    pa2m_afirmar(*(int*)arbol_raiz(arbol) == elementos[0],
+                 "Reconoce correctamente la raiz con un arbol de varios nodos\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_arbol_raiz () {
+
+    probar_arbol_raiz_valores_invalidos();
+    probar_arbol_raiz_arbol_un_nodo();
+    probar_arbol_raiz_arbol_varios_nodos();
+
+}
+
+
+
 void probar_arbol_recorrido_inorden_valores_invalidos () {
     abb_t* arbol = inicializar_arbol();
     int array[10];
@@ -549,6 +594,8 @@ int main() {
     pa2m_nuevo_grupo("Pruebas herramientas");
     printf(" * Arbol_buscar:\n");
     probar_arbol_buscar();
+    printf("\n * Arbol_raiz:\n");
+    probar_arbol_raiz();
 
     pa2m_nuevo_grupo("Pruebas Recorridos");
     printf(" * Arbol_recorrido_inorden:\n");
