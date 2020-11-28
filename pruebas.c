@@ -6,6 +6,11 @@
 #define ERROR -1
 #define EXITO 0
 
+typedef struct estructura {
+    int key;
+    int contador;
+} dato_t;
+
 int comparador_prueba (void* elemento_uno, void* elemento_dos) {
     return *(int*) elemento_uno > *(int*) elemento_dos ? 1 : *(int*) elemento_uno < *(int*) elemento_dos ? -1 : 0;
 }
@@ -170,6 +175,84 @@ void probar_arbol_borrar () {
     probar_arbol_borrar_un_elemento();
     probar_arbol_borrar_varios_elementos();
 
+}
+
+int comparador_contador (void* elemento_uno, void* elemento_dos) {
+    return ((dato_t*)elemento_uno)->key > ((dato_t*)elemento_dos)->key ? 1 : ((dato_t*)elemento_uno)->key < ((dato_t*)elemento_dos)->key ? -1 : 0;
+}
+
+void destructor_contador (void* dato) {
+    ((dato_t*)dato)->contador++;
+}
+
+void probar_arbol_destruir_funcion_destructor_un_nodo () {
+    abb_comparador comparador = comparador_contador;
+    abb_liberar_elemento destructor = destructor_contador;
+    abb_t* arbol = arbol_crear(comparador, destructor);
+
+    dato_t datos[1];
+
+    datos[0].key = 4;
+    datos[0].contador = 0;
+
+    arbol_insertar(arbol, datos);
+    arbol_destruir(arbol);
+
+    pa2m_afirmar(datos[0].contador > 0,
+                 "Se destruye el elemento del arbol con un nodo");
+
+    pa2m_afirmar(datos[0].contador == 1,
+                 "Se destruye el elemento del arbol solo una vez\n");
+}
+
+void probar_arbol_destruir_funcion_destructor_varios_nodos () {
+    abb_comparador comparador = comparador_prueba;
+    abb_liberar_elemento destructor = destructor_contador;
+    abb_t* arbol = arbol_crear(comparador, destructor);
+
+    dato_t datos[4];
+
+    datos[0].key = 4;
+    datos[0].contador = 0;
+    datos[1].key = 2;
+    datos[1].contador = 0;
+    datos[2].key = 6;
+    datos[2].contador = 0;
+    datos[3].key = 1;
+    datos[3].contador = 0;
+
+    for (int i = 0; i < 4; i++)
+        arbol_insertar(arbol, datos+i);
+
+    arbol_destruir(arbol);
+
+    bool destruccion_correcta = true;
+    int contador = 0;
+
+    while (contador < 4 && destruccion_correcta) {
+        destruccion_correcta = datos[contador].contador > 0 ? true : false;
+        contador++;
+    }
+
+    pa2m_afirmar(destruccion_correcta,
+                 "Se destruye todos los elementos del arbol con varios nodos");
+
+    contador = 0;
+    while (contador < 4 && destruccion_correcta) {
+        destruccion_correcta = datos[contador].contador == 1 ? true : false;
+        contador++;
+    }
+
+    pa2m_afirmar(destruccion_correcta,
+                 "Se destruyelos elementos del arbol con varios nodos una sola vez\n");
+}
+
+void probar_arbol_destruir () {
+
+    probar_arbol_destruir_funcion_destructor_un_nodo();
+    probar_arbol_destruir_funcion_destructor_varios_nodos();
+    // usando una estructura que tenga una key y un contador, usamos
+    // esa estructura para comprobar si lo pudo destruir correctamente
 }
 
 size_t insertar_n_valores (abb_t* arbol, int array[], size_t cantidad) {
@@ -617,6 +700,8 @@ int main() {
     probar_arbol_insertar();
     printf("\n * Arbol_borrar:\n");
     probar_arbol_borrar();
+    printf("\n * Arbol_destruir:\n");
+    probar_arbol_destruir();
 
     pa2m_nuevo_grupo("Pruebas herramientas");
     printf(" * Arbol_buscar:\n");
