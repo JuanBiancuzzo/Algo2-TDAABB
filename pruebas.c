@@ -6,10 +6,15 @@
 #define ERROR -1
 #define EXITO 0
 
-typedef struct estructura {
+typedef struct estructura_destruir {
     int key;
     int contador;
-} dato_t;
+} dato_destruir_t;
+
+typedef struct estructura_recorrido {
+    int key;
+    int contador;
+} dato_recorrido_t;
 
 int comparador_prueba (void* elemento_uno, void* elemento_dos) {
     return *(int*) elemento_uno > *(int*) elemento_dos ? 1 : *(int*) elemento_uno < *(int*) elemento_dos ? -1 : 0;
@@ -178,11 +183,16 @@ void probar_arbol_borrar () {
 }
 
 int comparador_contador (void* elemento_uno, void* elemento_dos) {
-    return ((dato_t*)elemento_uno)->key > ((dato_t*)elemento_dos)->key ? 1 : ((dato_t*)elemento_uno)->key < ((dato_t*)elemento_dos)->key ? -1 : 0;
+
+    if (((dato_destruir_t*)elemento_uno)->key > ((dato_destruir_t*)elemento_dos)->key)
+        return 1;
+    else if (((dato_destruir_t*)elemento_uno)->key < ((dato_destruir_t*)elemento_dos)->key)
+        return -1;
+    return 0;
 }
 
 void destructor_contador (void* dato) {
-    ((dato_t*)dato)->contador++;
+    ((dato_destruir_t*)dato)->contador++;
 }
 
 void probar_arbol_destruir_funcion_destructor_un_nodo () {
@@ -190,7 +200,7 @@ void probar_arbol_destruir_funcion_destructor_un_nodo () {
     abb_liberar_elemento destructor = destructor_contador;
     abb_t* arbol = arbol_crear(comparador, destructor);
 
-    dato_t datos[1];
+    dato_destruir_t datos[1];
 
     datos[0].key = 4;
     datos[0].contador = 0;
@@ -210,7 +220,7 @@ void probar_arbol_destruir_funcion_destructor_varios_nodos () {
     abb_liberar_elemento destructor = destructor_contador;
     abb_t* arbol = arbol_crear(comparador, destructor);
 
-    dato_t datos[4];
+    dato_destruir_t datos[4];
 
     datos[0].key = 4;
     datos[0].contador = 0;
@@ -251,8 +261,7 @@ void probar_arbol_destruir () {
 
     probar_arbol_destruir_funcion_destructor_un_nodo();
     probar_arbol_destruir_funcion_destructor_varios_nodos();
-    // usando una estructura que tenga una key y un contador, usamos
-    // esa estructura para comprobar si lo pudo destruir correctamente
+
 }
 
 size_t insertar_n_valores (abb_t* arbol, int array[], size_t cantidad) {
