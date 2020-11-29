@@ -609,7 +609,7 @@ void probar_arbol_recorrido_postorden_array_menor_arbol () {
     int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
     insertar_n_valores (arbol, elementos, 7);
 
-    int* array[9];
+    int* array[5];
     size_t tamanio_array = 5;
 
     size_t recorridos = arbol_recorrido_postorden(arbol, (void**)array, tamanio_array);
@@ -617,7 +617,7 @@ void probar_arbol_recorrido_postorden_array_menor_arbol () {
     pa2m_afirmar(recorridos == tamanio_array,
                  "Devuelve la cantidad correcta de elementos en un recorrido más corto que el arbol");
 
-    int elementos_esperados[5] = {1, 3, 2, 6, 4};
+    int elementos_esperados[7] = {1, 3, 2, 5, 7, 6, 4};
     bool postorden = true;
     size_t contador = 0;
 
