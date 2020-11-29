@@ -219,14 +219,16 @@ size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_arra
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
-    size_t valor = arbol_recorrido_postorden(arbol, array, tamanio_array-1);
-
-    if (tamanio_array - valor < 1)
-        return tamanio_array;
-    else tamanio_array -= valor;
+    size_t valor = arbol_recorrido_postorden(arbol, array, tamanio_array);
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_postorden(arbol, array+valor, tamanio_array-1);
+    size_t valor_dos = arbol_recorrido_postorden(arbol, array+valor, tamanio_array-valor);
+
+    if (tamanio_array - (valor + valor_dos) < 1) {
+        arbol->nodo_raiz = nodo_actual;
+        return tamanio_array;
+    }
+    tamanio_array -= (valor + valor_dos);
 
     arbol->nodo_raiz = nodo_actual;
     *(array+(valor+valor_dos)) = arbol_raiz(arbol);
