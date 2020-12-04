@@ -6,15 +6,15 @@
 #define ERROR -1
 #define EXITO 0
 
-typedef struct estructura_destruir {
+typedef struct estructura_contador {
     int key;
     int contador;
-} dato_destruir_t;
+} contador_t;
 
-typedef struct estructura_recorrido {
-    int key;
+typedef struct estructura_orden {
+    int* array;
     int contador;
-} dato_recorrido_t;
+} orden_t;
 
 int comparador_prueba (void* elemento_uno, void* elemento_dos) {
     return *(int*) elemento_uno > *(int*) elemento_dos ? 1 : *(int*) elemento_uno < *(int*) elemento_dos ? -1 : 0;
@@ -184,15 +184,15 @@ void probar_arbol_borrar () {
 
 int comparador_contador (void* elemento_uno, void* elemento_dos) {
 
-    if (((dato_destruir_t*)elemento_uno)->key > ((dato_destruir_t*)elemento_dos)->key)
+    if (((contador_t*)elemento_uno)->key > ((contador_t*)elemento_dos)->key)
         return 1;
-    else if (((dato_destruir_t*)elemento_uno)->key < ((dato_destruir_t*)elemento_dos)->key)
+    else if (((contador_t*)elemento_uno)->key < ((contador_t*)elemento_dos)->key)
         return -1;
     return 0;
 }
 
 void destructor_contador (void* dato) {
-    ((dato_destruir_t*)dato)->contador++;
+    ((contador_t*)dato)->contador++;
 }
 
 void probar_arbol_destruir_funcion_destructor_un_nodo () {
@@ -200,7 +200,7 @@ void probar_arbol_destruir_funcion_destructor_un_nodo () {
     abb_liberar_elemento destructor = destructor_contador;
     abb_t* arbol = arbol_crear(comparador, destructor);
 
-    dato_destruir_t datos[1];
+    contador_t datos[1];
 
     datos[0].key = 4;
     datos[0].contador = 0;
@@ -220,7 +220,7 @@ void probar_arbol_destruir_funcion_destructor_varios_nodos () {
     abb_liberar_elemento destructor = destructor_contador;
     abb_t* arbol = arbol_crear(comparador, destructor);
 
-    dato_destruir_t datos[4];
+    contador_t datos[4];
 
     datos[0].key = 4;
     datos[0].contador = 0;
@@ -677,14 +677,18 @@ void probar_iterador_interno_valores_invalidos () {
 }
 
 void probar_iterador_interno_recorrido_inorden () {
-    abb_t* arbol = inicializar_arbol();
+
+    abb_comparador comparador = comparador_contador;
+    abb_liberar_elemento destructor = destructor_contador;
+    abb_t* arbol = arbol_crear(comparador, destructor);
+
     int elementos[15] = {8, 4, 12, 2, 6, 14, 1, 3, 5, 7, 13};
     bool (*funcion) (void*, void*) = iterador_avanzar;
 
     for (int i = 0; i < 11; i++)
         arbol_insertar(arbol, elementos+i);
 
-    abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, funcion, NULL);
+    abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, NULL);
 
     arbol_destruir(arbol);
 }
@@ -692,6 +696,7 @@ void probar_iterador_interno_recorrido_inorden () {
 void probar_iterador_interno () {
 
     probar_iterador_interno_valores_invalidos();
+
     probar_iterador_interno_recorrido_inorden();
     //probar_iterador_interno_recorrido_preorden();
     //probar_iterador_interno_recorrido_postorden();

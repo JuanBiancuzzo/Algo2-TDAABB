@@ -177,6 +177,7 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
         arbol->nodo_raiz = nodo_actual;
         return tamanio_array;
     }
+
     tamanio_array -= valor;
 
     arbol->nodo_raiz = nodo_actual->derecha;
