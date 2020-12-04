@@ -656,6 +656,12 @@ bool iterador_avanzar (void* elemento, void* extra) {
     return false;
 }
 
+bool iterador_avanzar_dos (void* elemento, void* extra) {
+    (((orden_t*)extra)->array)[((orden_t*)extra)->contador] = *(int*)elemento;
+    ((orden_t*)extra)->contador++;
+    return false;
+}
+
 void probar_iterador_interno_valores_invalidos () {
 
     abb_t* arbol = inicializar_arbol();
@@ -722,12 +728,47 @@ void probar_iterador_interno_recorrido_inorden () {
     arbol_destruir(arbol);
 }
 
+void probar_iterador_interno_recorrido_inorden_dos () {
+    abb_t* arbol = inicializar_arbol();
+    int datos[5] = {4, 2, 6, 1, 7};
+    int valor_esperado[5] = {1, 2, 4, 6, 7};
+
+    int resultado[5];
+    orden_t orden;
+    orden.array = resultado;
+    orden.contador = 0;
+
+    bool (*funcion) (void*, void*) = iterador_avanzar_dos;
+
+    bool recorrido_correcto = true;
+    int contador = 0;
+
+    for (int i = 0; i < 5; i++)
+        arbol_insertar(arbol, datos+i);
+
+    abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, &orden);
+
+    while (contador < 5 && recorrido_correcto) {
+        recorrido_correcto = valor_esperado[contador] == resultado[contador] ? true : false;
+        contador++;
+    }
+
+    pa2m_afirmar(recorrido_correcto,
+                 "Se recorre correctamente el arbol\n");
+
+    arbol_destruir(arbol);
+}
+
 void probar_iterador_interno () {
 
     probar_iterador_interno_valores_invalidos();
 
+    printf(" * Recorrido inorden:\n");
     probar_iterador_interno_recorrido_inorden();
+    probar_iterador_interno_recorrido_inorden_dos();
+    printf(" * Recorrido preorden:\n");
     //probar_iterador_interno_recorrido_preorden();
+    printf(" * Recorrido postorden:\n");
     //probar_iterador_interno_recorrido_postorden();
 
 }
