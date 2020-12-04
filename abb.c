@@ -57,11 +57,11 @@ int arbol_insertar(abb_t* arbol, void* elemento) {
 /*
  * Devuelve el nodo que se encuentra totalmente a la derecha
  */
-nodo_abb_t* predecesor_inorder(nodo_abb_t* nodo) {
+nodo_abb_t* predecesor_inorden(nodo_abb_t* nodo) {
     if (!nodo->derecha)
         return nodo;
 
-    return predecesor_inorder(nodo->derecha);
+    return predecesor_inorden(nodo->derecha);
 }
 
 /*
@@ -76,6 +76,25 @@ nodo_abb_t* reemplazar_predecesor(nodo_abb_t* rama, nodo_abb_t* predecesor_hijo)
     return rama;
 }
 
+/*
+ * Dado un árbol, elimina la raiz. Si tiene un hijo lo reemplaza el hijo que tiene. Si tiene dos hijos,
+ * el predecesor inorden lo reemplazará y tomará como hijo derecho al hijo derecho de la raiz
+ */
+void arbol_borrar_raiz(abb_t* arbol) {
+    nodo_abb_t* nodo_borrar = arbol->nodo_raiz;
+
+    if (nodo_borrar->derecha && nodo_borrar->izquierda) {
+        arbol->nodo_raiz = predecesor_inorden(nodo_borrar->izquierda);
+        arbol->nodo_raiz->izquierda = reemplazar_predecesor(nodo_borrar->izquierda, arbol->nodo_raiz->izquierda);
+        arbol->nodo_raiz->derecha = nodo_borrar->derecha;
+    } else {
+        arbol->nodo_raiz = nodo_borrar->izquierda ? nodo_borrar->izquierda : nodo_borrar->derecha;
+    }
+
+    if (arbol->destructor) arbol->destructor(nodo_borrar->elemento);
+    free(nodo_borrar);
+}
+
 int arbol_borrar(abb_t* arbol, void* elemento) {
 
     if (!arbol) return ERROR;
@@ -83,26 +102,13 @@ int arbol_borrar(abb_t* arbol, void* elemento) {
     if (arbol_vacio(arbol)) return ERROR;
 
     int comparacion = arbol->comparador(elemento, arbol_raiz(arbol));
-    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     if (comparacion == 0) {
-
-        if (nodo_actual->derecha && nodo_actual->izquierda) {
-
-            arbol->nodo_raiz = predecesor_inorder(nodo_actual->izquierda);
-            arbol->nodo_raiz->izquierda = reemplazar_predecesor(nodo_actual->izquierda, arbol->nodo_raiz->izquierda);
-            arbol->nodo_raiz->derecha = nodo_actual->derecha;
-
-        } else {
-            arbol->nodo_raiz = nodo_actual->izquierda ? nodo_actual->izquierda : nodo_actual->derecha;
-        }
-
-        if (arbol->destructor) arbol->destructor(nodo_actual->elemento);
-        free(nodo_actual);
-
+        arbol_borrar_raiz(arbol);
         return EXITO;
     }
 
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
     arbol->nodo_raiz = comparacion > 0 ? arbol->nodo_raiz->derecha : arbol->nodo_raiz->izquierda;
 
     if (arbol_borrar(arbol, elemento) == ERROR) return ERROR;
