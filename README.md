@@ -4,7 +4,7 @@ Este tipo de dato abstracto es un árbol binario de búsqueda (ABB), con sus ope
 
 Por último tenemos un iterador interno, donde se puede especificar que tipo de recorrido se quiere usar.
 
-## Compilación y ejecucion
+## Compilación y ejecución
 
 ### Compilar
     
@@ -28,3 +28,25 @@ También con makefile podemos hacer lo mismo con la linea
 make valgrind
 ```
 
+
+## Detalles de la implementación
+
+### Funcion crear
+
+### Funcion insertar
+
+### Funcion borrar
+
+### Funcion buscar
+
+### Funcion recorrido
+
+#### Recorrido inorden 
+
+#### Recorrido preorden 
+
+#### Recorrido postorden 
+
+### Funcion destruir
+
+### Funcion iterador interno
