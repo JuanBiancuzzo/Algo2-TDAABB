@@ -41,6 +41,11 @@ Lo primero que hacemos es comprobar que el árbol sea valido. Teniendo en cuenta
 Reservamos memoria para crear un nodo más del árbol, le asignamos el elemento que va a guardar, y devolvemos el puntero de la nueva hoja.
 
 ### Funcion borrar
+Lo primero que hacemos es comprobar que el árbol sea valido. Después de eso buscamos el elemento que queremos eliminar, si no esta el elemento podemos no hacer nada. En el caso de que lo encontremos, tenemos 3 posibilidades en las que nos podemos encontrar:
+
+En el primer caso es que no tenga hijos el elemento a eliminar, entonces usamos el destructor (si lo tenemos) y lo reemplazamos por NULL en la rama que vinimos a buscarlo.
+El segundo caso es que tenga un lo hijo el elemento a eliminar, entonces usamos el destructor (si lo tenemos) y lo reemplazamos con el hijo que tenía.
+En el tercer caso es que tenga los dos hijo el elemento a eliminar, entonces usamos el destructor (si lo tenemos) y buscamos su reemplazo, en este caso, usamos el predecesor inorden, que es el mayor de la rama izquierda del elemento a eliminar y al predecesor le agregamos a su rama derecha, la rama derecha del elemento a eliminar.
 
 ### Funcion buscar
 Lo primero que hacemos es comprobar que el árbol sea valido. Después comprobamos si el elemento en el que estamos es el que estamos búscando, si lo es devolvemos ese, sino vemos si el elemento que estamos buscando, usando la función de comparación, vamos a la rama derecha o la rama izquierda, y repetimos el proceso hasta llegar al elemento que buscamos o recorrer todo el árbol, y en ese caso devolvemos NULL que es la forma de indicar que no encontramos el elemento.
