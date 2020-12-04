@@ -74,3 +74,4 @@ El procedimiento es igual que el recorrido inorden pero cambiando el orden en el
 Lo primero que hacemos es comprobar que el árbol sea valido. Después si el árbol esta vacio liberamos la memoria reservada y lista. En el caso que no este vacia, vamos hasta las hojas y si tenemos destructor, lo usamos y después vamos subien por el árbol hasta llegar a la raíz.
 
 ### Funcion iterador interno
+Lo primero que hacemos es comprobar que el árbol y la función sean validas. Después dependiendo el recorrido, el orden en el que se llama con la rama izquierda, la derecha o la función que se nos pasa. 
