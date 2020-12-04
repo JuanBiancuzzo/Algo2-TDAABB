@@ -71,5 +71,6 @@ Sorpresa sorpresa, lo primero es entender que el recorrido postorden, es la form
 El procedimiento es igual que el recorrido inorden pero cambiando el orden en el que se hacen las llamadas recursivas.
 
 ### Funcion destruir
+Lo primero que hacemos es comprobar que el árbol sea valido. Después si el árbol esta vacio liberamos la memoria reservada y lista. En el caso que no este vacia, vamos hasta las hojas y si tenemos destructor, lo usamos y después vamos subien por el árbol hasta llegar a la raíz.
 
 ### Funcion iterador interno
