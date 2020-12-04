@@ -32,6 +32,8 @@ make valgrind
 ## Detalles de la implementación
 
 ### Funcion crear
+Lo primero que hacemos es comprobar que la función de comparación que se nos pasa como parametro sea valida, no es necesario comprobar si la función de destrucción sea valida porque esta puede no existir, por lo que no es un problema que sea NULL.
+Luego reservamos memoria en el heap y comprobamos que no haya dado un puntero valido, después asignamos las funciones al arbol creado y lo devolvemos.
 
 ### Funcion insertar
 
