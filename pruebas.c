@@ -741,10 +741,66 @@ void probar_iterador_interno_recorrido_inorden_orden () {
 
     arbol_destruir(arbol);
 }
+
+void probar_iterador_interno_recorrido_preorden_cada_nodo () {
+
+    abb_comparador comparador = comparador_contador;
+    abb_liberar_elemento destructor = destructor_prueba;
+    abb_t* arbol = arbol_crear(comparador, destructor);
+
+    bool (*funcion) (void*, void*) = iterador_avanzar;
+    contador_t datos[5];
+
+    int elementos[5] = {4, 2, 6, 1, 7};
+    bool recorrido_correcto = true;
+    int cantidad = 5;
+
+    for (int i = 0; i < cantidad; i++) {
+        datos[i].key = *(elementos+i);
+        datos[i].contador = 0;
+        arbol_insertar(arbol, datos+i);
     }
 
-    pa2m_afirmar(recorrido_correcto,
-                 "Se recorre correctamente el arbol\n");
+    abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, funcion, NULL);
+
+    for (int i = 0; i < cantidad && recorrido_correcto; i++)
+        recorrido_correcto = datos[i].contador > 0 ? true : false;
+
+    pa2m_afirmar(recorrido_correcto, "Se recorren todos los elementos del arbol por lo menos una vez");
+
+    for (int i = 0; i < cantidad && recorrido_correcto; i++)
+        recorrido_correcto = datos[i].contador == 1 ? true : false;
+
+    pa2m_afirmar(recorrido_correcto, "Se recorren todos los elementos del arbol solo una vez\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_iterador_interno_recorrido_preorden_orden () {
+    abb_t* arbol = inicializar_arbol();
+    int datos[5] = {4, 2, 6, 1, 7};
+    int valor_esperado[5] = {4, 2, 1, 6, 7};
+
+    int resultado[5];
+    int cantidad = 5;
+    orden_t orden = {resultado, 0};
+
+    bool (*funcion) (void*, void*) = iterador_avanzar_dos;
+
+    bool recorrido_correcto = true;
+
+    for (int i = 0; i < cantidad; i++)
+        arbol_insertar(arbol, datos+i);
+
+    abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, funcion, &orden);
+
+    for (int i = 0; i < cantidad && recorrido_correcto; i++)
+        recorrido_correcto = valor_esperado[i] == resultado[i] ? true : false;
+
+    pa2m_afirmar(recorrido_correcto, "Se recorre el arbol de forma preorden de forma correcta\n");
+
+    arbol_destruir(arbol);
+}
 
     arbol_destruir(arbol);
 }
@@ -753,13 +809,12 @@ void probar_iterador_interno () {
 
     probar_iterador_interno_valores_invalidos();
 
-    printf(" * Recorrido inorden:\n");
+    printf("  · Recorrido inorden:\n");
     probar_iterador_interno_recorrido_inorden_cada_nodo();
     probar_iterador_interno_recorrido_inorden_orden();
-    printf(" * Recorrido preorden:\n");
-    //probar_iterador_interno_recorrido_preorden();
-    printf(" * Recorrido postorden:\n");
-    //probar_iterador_interno_recorrido_postorden();
+    printf("  · Recorrido preorden:\n");
+    probar_iterador_interno_recorrido_preorden_cada_nodo();
+    probar_iterador_interno_recorrido_preorden_orden();
 
 }
 
