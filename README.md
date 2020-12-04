@@ -36,6 +36,9 @@ Lo primero que hacemos es comprobar que la función de comparación que se nos p
 Luego reservamos memoria en el heap y comprobamos que no haya dado un puntero valido, después asignamos las funciones al arbol creado y lo devolvemos.
 
 ### Funcion insertar
+Como siempre se inserta una hoja en un árbol binario de búsqueda, entonces lo que hacemos es ir recorriendo el árbol, usando la función comparación vamos eligiendo si vamos para la rama izquierda o la rama derecha. Cuando ya no haya una rama para ir, esé será donde va a ir la hoja.
+
+Reservamos memoria para crear un nodo más del árbol, le asignamos el elemento que va a guardar, y devolvemos el puntero de la nueva hoja.
 
 ### Funcion borrar
 
