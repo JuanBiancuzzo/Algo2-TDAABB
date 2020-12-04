@@ -682,75 +682,65 @@ void probar_iterador_interno_valores_invalidos () {
     arbol_destruir(arbol);
 }
 
-void probar_iterador_interno_recorrido_inorden () {
+void probar_iterador_interno_recorrido_inorden_cada_nodo () {
 
     abb_comparador comparador = comparador_contador;
     abb_liberar_elemento destructor = destructor_prueba;
     abb_t* arbol = arbol_crear(comparador, destructor);
 
     bool (*funcion) (void*, void*) = iterador_avanzar;
-    contador_t datos[4];
+    contador_t datos[5];
 
-    datos[0].key = 4;
-    datos[0].contador = 0;
-    datos[1].key = 2;
-    datos[1].contador = 0;
-    datos[2].key = 6;
-    datos[2].contador = 0;
-    datos[3].key = 1;
-    datos[3].contador = 0;
-
+    int elementos[5] = {4, 2, 6, 1, 7};
     bool recorrido_correcto = true;
-    int contador = 0;
+    int cantidad = 5;
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < cantidad; i++) {
+        datos[i].key = *(elementos+i);
+        datos[i].contador = 0;
         arbol_insertar(arbol, datos+i);
+    }
 
     abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, NULL);
 
-    while (contador < 4 && recorrido_correcto) {
-        recorrido_correcto = datos[contador].contador > 0 ? true : false;
-        contador++;
-    }
+    for (int i = 0; i < cantidad && recorrido_correcto; i++)
+        recorrido_correcto = datos[i].contador > 0 ? true : false;
 
-    pa2m_afirmar(recorrido_correcto,
-                 "Se recorren todos los elementos del arbol por lo menos una vez");
+    pa2m_afirmar(recorrido_correcto, "Se recorren todos los elementos del arbol por lo menos una vez");
 
-    contador = 0;
-    while (contador < 4 && recorrido_correcto) {
-        recorrido_correcto = datos[contador].contador == 1 ? true : false;
-        contador++;
-    }
+    for (int i = 0; i < cantidad && recorrido_correcto; i++)
+        recorrido_correcto = datos[i].contador == 1 ? true : false;
 
-    pa2m_afirmar(recorrido_correcto,
-                 "Se recorren todos los elementos del arbol solo una vez\n");
+    pa2m_afirmar(recorrido_correcto, "Se recorren todos los elementos del arbol solo una vez\n");
 
     arbol_destruir(arbol);
 }
 
-void probar_iterador_interno_recorrido_inorden_dos () {
+void probar_iterador_interno_recorrido_inorden_orden () {
     abb_t* arbol = inicializar_arbol();
     int datos[5] = {4, 2, 6, 1, 7};
     int valor_esperado[5] = {1, 2, 4, 6, 7};
 
     int resultado[5];
-    orden_t orden;
-    orden.array = resultado;
-    orden.contador = 0;
+    int cantidad = 5;
+    orden_t orden = {resultado, 0};
 
     bool (*funcion) (void*, void*) = iterador_avanzar_dos;
 
     bool recorrido_correcto = true;
-    int contador = 0;
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < cantidad; i++)
         arbol_insertar(arbol, datos+i);
 
     abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, &orden);
 
-    while (contador < 5 && recorrido_correcto) {
-        recorrido_correcto = valor_esperado[contador] == resultado[contador] ? true : false;
-        contador++;
+    for (int i = 0; i < cantidad && recorrido_correcto; i++)
+        recorrido_correcto = valor_esperado[i] == resultado[i] ? true : false;
+
+    pa2m_afirmar(recorrido_correcto, "Se recorre el arbol de forma inorden de forma correcta\n");
+
+    arbol_destruir(arbol);
+}
     }
 
     pa2m_afirmar(recorrido_correcto,
@@ -764,8 +754,8 @@ void probar_iterador_interno () {
     probar_iterador_interno_valores_invalidos();
 
     printf(" * Recorrido inorden:\n");
-    probar_iterador_interno_recorrido_inorden();
-    probar_iterador_interno_recorrido_inorden_dos();
+    probar_iterador_interno_recorrido_inorden_cada_nodo();
+    probar_iterador_interno_recorrido_inorden_orden();
     printf(" * Recorrido preorden:\n");
     //probar_iterador_interno_recorrido_preorden();
     printf(" * Recorrido postorden:\n");
