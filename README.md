@@ -51,12 +51,24 @@ En el tercer caso es que tenga los dos hijo el elemento a eliminar, entonces usa
 Lo primero que hacemos es comprobar que el árbol sea valido. Después comprobamos si el elemento en el que estamos es el que estamos búscando, si lo es devolvemos ese, sino vemos si el elemento que estamos buscando, usando la función de comparación, vamos a la rama derecha o la rama izquierda, y repetimos el proceso hasta llegar al elemento que buscamos o recorrer todo el árbol, y en ese caso devolvemos NULL que es la forma de indicar que no encontramos el elemento.
 
 ### Funcion recorrido
+Lo primero, explicando que hacen, recorrer el árbol de forma inorden, preorden o postorden, y van guardando en un array los elementos que va encontrando dependiendo de la forma de recorrer.
+
+En cualquier recorrido lo primero que hacemos es comprobar que el árbol sea valido y que el array sea valido
 
 #### Recorrido inorden 
+Lo principal es entender que el recorrido inorden, es la forma de recorrer el árbol primero yendo por la rama izquierda, después (en este caso) guardando el elemento actual y por último ir por la rama derecha.
+
+Lo hacemos de forma recursiva, entonces primero llamamos a la función mandando la rama izquierda, después guardamos en el array el valor que tenemos en el nodo actual, en el caso de que lleguemos al tome del array devolvemos ahí, sino llamamos a la función mandando la rama derecha.
 
 #### Recorrido preorden 
+De nuevo, lo primero es entender que el recorrido preorden, es la forma de recorrer el árbol primero (en este caso) guardando el elemento actual, después yendo por la rama izquierda y por último vamos por la rama derecha.
+
+El procedimiento es igual que el recorrido inorden pero cambiando el orden en el que se hacen las llamadas recursivas.
 
 #### Recorrido postorden 
+Sorpresa sorpresa, lo primero es entender que el recorrido postorden, es la forma de recorrer el árbol primero yendo por la rama izquierda, después yendo por la rama derecha y por último (en este caso) guardando el elemento actual.
+
+El procedimiento es igual que el recorrido inorden pero cambiando el orden en el que se hacen las llamadas recursivas.
 
 ### Funcion destruir
 
