@@ -862,6 +862,62 @@ void probar_iterador_interno_recorrido_postorden_orden () {
     arbol_destruir(arbol);
 }
 
+bool iterador_avanzar_tres (void* elemento, void* extra) {
+    elemento = elemento;
+    (*(int*)extra)++;
+
+    return (*(int*)extra >= 4);
+}
+
+void probar_iterador_interno_cantidad_devuelta () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    size_t recorrido, cantidad = insertar_n_valores(arbol, elementos, 7);
+
+    bool (*funcion) (void*, void*) = iterador_avanzar;
+
+    recorrido = abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, NULL);
+    pa2m_afirmar(recorrido == cantidad,
+                 "El recorrido inorden devuelve la cantidad esperada al recorrer todo el arbol");
+
+    recorrido = abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, funcion, NULL);
+    pa2m_afirmar(recorrido == cantidad,
+                 "El recorrido preorden devuelve la cantidad esperada al recorrer todo el arbol");
+
+    recorrido = abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, funcion, NULL);
+    pa2m_afirmar(recorrido == cantidad,
+                 "El recorrido postorden devuelve la cantidad esperada al recorrer todo el arbol\n");
+
+    arbol_destruir(arbol);
+}
+
+void probar_iterador_interno_cantidad_devuelta_con_corte () {
+    abb_t* arbol = inicializar_arbol();
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    size_t recorrido, cantidad = 4;
+    int contador;
+
+    insertar_n_valores(arbol, elementos, 7);
+    bool (*funcion) (void*, void*) = iterador_avanzar_tres;
+
+    contador = 0;
+    recorrido = abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, funcion, &contador);
+    pa2m_afirmar(recorrido == cantidad,
+                 "El recorrido inorden devuelve la cantidad esperada al recorrer todo el arbol");
+
+    contador = 0;
+    recorrido = abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, funcion, &contador);
+    pa2m_afirmar(recorrido == cantidad,
+                 "El recorrido preorden devuelve la cantidad esperada al recorrer todo el arbol");
+
+    contador = 0;
+    recorrido = abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, funcion, &contador);
+    pa2m_afirmar(recorrido == cantidad,
+                 "El recorrido postorden devuelve la cantidad esperada al recorrer todo el arbol\n");
+
+    arbol_destruir(arbol);
+}
+
 void probar_iterador_interno () {
 
     probar_iterador_interno_valores_invalidos();
@@ -875,6 +931,9 @@ void probar_iterador_interno () {
     printf("  · Recorrido postorden:\n");
     probar_iterador_interno_recorrido_postorden_cada_nodo();
     probar_iterador_interno_recorrido_postorden_orden();
+
+    probar_iterador_interno_cantidad_devuelta();
+    probar_iterador_interno_cantidad_devuelta_con_corte();
 
 }
 
