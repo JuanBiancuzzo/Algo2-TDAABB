@@ -420,6 +420,7 @@ void probar_arbol_recorrido_inorden_valores_invalidos () {
 void probar_arbol_recorrido_inorden_array_mayor_arbol () {
     abb_t* arbol = inicializar_arbol();
     int elementos [7] = {4, 2, 6, 1, 3, 5, 7};
+    int orden_esperado[7] = {1, 2, 3, 4, 5, 6, 7};
     size_t cantidad = insertar_n_valores (arbol, elementos, 7);
 
     int* array[9];
@@ -430,15 +431,11 @@ void probar_arbol_recorrido_inorden_array_mayor_arbol () {
     pa2m_afirmar(recorridos == cantidad,
                  "Devuelve la cantidad correcta de elementos en un recorrido más largo que el arbol");
 
-    size_t contador = 0;
     bool inorden = true;
 
-    while (contador+1  < recorridos && inorden) {
-
-        if (*(int*)(array[contador])+1 != *(int*)(array[contador+1]))
+    for (size_t i = 0; i < recorridos && inorden; i++)
+        if (*(int*)array[i] != orden_esperado[i])
             inorden = false;
-        contador++;
-    }
 
     pa2m_afirmar(inorden,
                  "Se recorre correctamente el arbol con un array mayor que el arbol\n");
@@ -449,6 +446,7 @@ void probar_arbol_recorrido_inorden_array_mayor_arbol () {
 void probar_arbol_recorrido_inorden_array_menor_arbol () {
     abb_t* arbol = inicializar_arbol();
     int elementos [7] = {4, 2, 6, 1, 3, 5, 7};
+    int orden_esperado[7] = {1, 2, 3, 4, 5, 6, 7};
     insertar_n_valores (arbol, elementos, 7);
 
     int* array[9];
@@ -459,15 +457,11 @@ void probar_arbol_recorrido_inorden_array_menor_arbol () {
     pa2m_afirmar(recorridos == tamanio_array,
                     "Devuelve la cantidad correcta de elementos en un recorrido más corto que el arbol");
 
-    size_t contador = 0;
     bool inorden = true;
 
-    while (contador+1  < recorridos && inorden) {
-
-        if (*(int*)(array[contador])+1 != *(int*)(array[contador+1]))
+    for (size_t i = 0; i < recorridos && inorden; i++)
+        if (*(int*)array[i] != orden_esperado[i])
             inorden = false;
-        contador++;
-    }
 
     pa2m_afirmar(inorden,
                     "Se recorre correctamente el arbol con un array menor que el arbol\n");
@@ -502,7 +496,8 @@ void probar_arbol_recorrido_preorden_valores_invalidos () {
 
 void probar_arbol_recorrido_preorden_array_mayor_arbol () {
     abb_t* arbol = inicializar_arbol();
-    int elementos[7] = {1, 2, 3, 4, 5, 6, 7};
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    int orden_esperado[7] = {4, 2, 1, 3, 6, 5, 7};
     size_t cantidad = insertar_n_valores (arbol, elementos, 7);
 
     int* array[9];
@@ -513,15 +508,11 @@ void probar_arbol_recorrido_preorden_array_mayor_arbol () {
     pa2m_afirmar(recorridos == cantidad,
                  "Devuelve la cantidad correcta de elementos en un recorrido más largo que el arbol");
 
-    size_t contador = 0;
     bool preorden = true;
 
-    while (contador+1  < recorridos && preorden) {
-
-        if (*(int*)(array[contador])+1 != *(int*)(array[contador+1]))
+    for (size_t i = 0; i < recorridos && preorden; i++)
+        if (*(int*)array[i] != orden_esperado[i])
             preorden = false;
-        contador++;
-    }
 
     pa2m_afirmar(preorden,
                  "Se recorre correctamente el arbol con un array mayor que el arbol\n");
@@ -531,7 +522,8 @@ void probar_arbol_recorrido_preorden_array_mayor_arbol () {
 
 void probar_arbol_recorrido_preorden_array_menor_arbol () {
     abb_t* arbol = inicializar_arbol();
-    int elementos[7] = {1, 2, 3, 4, 5, 6, 7};
+    int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    int orden_esperado[7] = {4, 2, 1, 3, 6, 5, 7};
     insertar_n_valores (arbol, elementos, 7);
 
     int* array[9];
@@ -542,15 +534,11 @@ void probar_arbol_recorrido_preorden_array_menor_arbol () {
     pa2m_afirmar(recorridos == tamanio_array,
                  "Devuelve la cantidad correcta de elementos en un recorrido más corto que el arbol");
 
-    size_t contador = 0;
     bool preorden = true;
 
-    while (contador+1  < recorridos && preorden) {
-
-        if (*(int*)(array[contador])+1 != *(int*)(array[contador+1]))
+    for (size_t i = 0; i < recorridos && preorden; i++)
+        if (*(int*)array[i] != *(orden_esperado+i))
             preorden = false;
-        contador++;
-    }
 
     pa2m_afirmar(preorden,
                  "Se recorre correctamente el arbol con un array menor que el arbol\n");
@@ -586,6 +574,7 @@ void probar_arbol_recorrido_postorden_valores_invalidos () {
 void probar_arbol_recorrido_postorden_array_mayor_arbol () {
     abb_t* arbol = inicializar_arbol();
     int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    int orden_esperado[7] = {1, 3, 2, 5, 7, 6, 4};
     size_t cantidad = insertar_n_valores (arbol, elementos, 7);
 
     int* array[9];
@@ -596,16 +585,11 @@ void probar_arbol_recorrido_postorden_array_mayor_arbol () {
     pa2m_afirmar(recorridos == cantidad,
                  "Devuelve la cantidad correcta de elementos en un recorrido más largo que el arbol");
 
-    int elementos_esperados[7] = {1, 3, 2, 5, 7, 6, 4};
     bool postorden = true;
-    size_t contador = 0;
 
-    while (contador < recorridos && postorden) {
-
-        if (*(int*)array[contador] != elementos_esperados[contador])
+    for (size_t i = 0; i < recorridos && postorden; i++)
+        if (*(int*)array[i] != *(orden_esperado+i))
             postorden = false;
-        contador++;
-    }
 
     pa2m_afirmar(postorden,
                  "Se recorre correctamente el arbol con un array mayor que el arbol\n");
@@ -616,6 +600,7 @@ void probar_arbol_recorrido_postorden_array_mayor_arbol () {
 void probar_arbol_recorrido_postorden_array_menor_arbol () {
     abb_t* arbol = inicializar_arbol();
     int elementos[7] = {4, 2, 6, 1, 3, 5, 7};
+    int orden_esperado[7] = {1, 3, 2, 5, 7, 6, 4};
     insertar_n_valores (arbol, elementos, 7);
 
     int* array[5];
@@ -626,15 +611,11 @@ void probar_arbol_recorrido_postorden_array_menor_arbol () {
     pa2m_afirmar(recorridos == tamanio_array,
                  "Devuelve la cantidad correcta de elementos en un recorrido más corto que el arbol");
 
-    int elementos_esperados[7] = {1, 3, 2, 5, 7, 6, 4};
     bool postorden = true;
-    size_t contador = 0;
 
-    while (contador < recorridos && postorden) {
-        if (*(int*)array[contador] != elementos_esperados[contador])
+    for (size_t i = 0; i < recorridos && postorden; i++)
+        if (*(int*)array[i] != *(orden_esperado+i))
             postorden = false;
-        contador++;
-    }
 
     pa2m_afirmar(postorden,
                  "Se recorre correctamente el arbol con un array menor que el arbol\n");
