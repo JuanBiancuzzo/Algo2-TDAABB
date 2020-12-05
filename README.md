@@ -78,13 +78,19 @@ Lo primero que hacemos es comprobar que el árbol y la función sean validas. De
 
 ## Conceptos teóricos
 
-### Árbol binario de búsqueda y árbol binario
+### Árbol binario y árbol binario de búsqueda 
 
-#### Que es un árbol binario de búsqueda
-El árbol binario de búsqueda es un tipo de dato que aprovecha la busqueda binaria. Este árbol tiene la estructura de que cada nodo se divide en dos con la propiedad de los menores al nodo actual se situan a la izquierda, y los mayores a la derecha, por eso decimos que aprovecha la busqueda binaria.
+#### Que es un árbol binario y un árbol binario de búsqueda
+Primero expliquemos que es un árbol binario, es la estructura tal que cada elemento pueda llevarte a dos elementos más. Como en una lista que cada elemento te puede llevar al siguiente, el árbol tendría dos siguientes, un izquierdo y un derecho.
+
+Ahora explicamos que es un árbol binario de busqueda, por su nombre vemos que es un árbol binario pero toma inspiración del algoritmo de búsqueda binaria. Recordando el algoritmo de búsqueda binaria, este intentaba reducir a la mitad el espacio de búsqueda aprovechandose del hecho que el arreglo donde esta buscando esta ordenada por lo que si se situa en el medio del arreglo, si es menor tiene que estar a la izquierda y si es mayor tiene que estar a la derecha. 
+
+El árbol binario de búsqueda esta estructurado tal que valores menores al nodo que uno esta posicionado se encuentren yendo por la rama izquierda, y valores mayores yendo por la rama derecha. Entonces cada vez que se mueve por el árbol, ya sea yendo por la rama izquierda o por la derecha, uno va reduciendo a la mitad el espacio de búsqueda al igual que hace el algoritmo de búsqueda binaria.
 
 #### Diferencia con un árbol binario
-La diferencia principal es la propiedad con la que se ubican los elementos, donde los menores a la izquierda y los mayores a la derecha.
+La diferencia entre estas dos esctructuras es la organización que tiene el árbol binario de búsqueda, que es inexistente en el árbol binario. Esto hace que la búsqueda en el ABB tenga una complejidad de O(log(n)) cuando en el AB sea O(n), porque se tiene recorrer todo el árbol para encontrar el valor. 
+
+También cabe aclarar que esta ventaja en cuanto a la búsqueda, se obtiene por un aumento en complejidad estructural en comparación a un AB, ya que es necesario mantener la propiedad (menores a la izquierda, mayores a la derecha) en cualquier operación como la inserción, eliminación, etc.
 
 ### La función destrucción 
 Como el árbol esta pensando para que el usuario pueda guardar lo que quiera; en el caso de que guarde dato que necesita una forma especifica para destruirse, este tda le permite al usuario decidir como se destruye ese dato.
