@@ -85,3 +85,13 @@ El árbol binario de búsqueda es un tipo de dato que aprovecha la busqueda bina
 
 #### Diferencia con un árbol binario
 La diferencia principal es la propiedad con la que se ubican los elementos, donde los menores a la izquierda y los mayores a la derecha.
+
+### La función destrucción 
+Como el árbol esta pensando para que el usuario pueda guardar lo que quiera; en el caso de que guarde dato que necesita una forma especifica para destruirse, este tda le permite al usuario decidir como se destruye ese dato.
+
+En el caso de que no dieramos esta posibilidades, tendríamos que limitar los datos que podría guardar, y por lo tanto el usuario no va a poder guardar lo que quiera. 
+
+Demos un ejemplo para entender mejor esto: si yo creo un puntero al heap, e inserto ese puntero en el árbol, si eliminara el nodo que contiene ese puntero al heal, tendría perdidas de memoria ya que ese puntero al heap se perdio. Entonces si tengo una función destrucción puedo hacer que cuando se elimine ese nodo, libere el puntero al heap, así solucionando el problema. En el caso de no tenerlo no tendría opción de usar un puntero al heap, porque sin la función destrucción siempre se perdería memoría cuando usamos un puntero al heap.
+
+### Complejidades
+
