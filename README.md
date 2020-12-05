@@ -100,4 +100,14 @@ En el caso de que no dieramos esta posibilidades, tendríamos que limitar los da
 Demos un ejemplo para entender mejor esto: si yo creo un puntero al heap, e inserto ese puntero en el árbol, si eliminara el nodo que contiene ese puntero al heal, tendría perdidas de memoria ya que ese puntero al heap se perdio. Entonces si tengo una función destrucción puedo hacer que cuando se elimine ese nodo, libere el puntero al heap, así solucionando el problema. En el caso de no tenerlo no tendría opción de usar un puntero al heap, porque sin la función destrucción siempre se perdería memoría cuando usamos un puntero al heap.
 
 ### Complejidades
+Tenemos las operaciones crear, buscar insertar, borrar y destruir
 
+Crear: tiene una complejidad de O(1) ya que es reservar memoria y esa operación es O(1) y asignar los punteros de las funciones, que también son O(1).
+
+Buscar: tiene una complejidad de O(log(n)) ya que en el peor de los casos es en el nivel más bajo del árbol, por lo que tiene que recorrer la altura del árbol y este es O(log(n)) como lo dice el teorema maestro.
+
+Insertar: tiene una complejidad de O(log(n)) ya que tiene que buscar el lugar donde insertar, como dijimos antes esta operacion es O(log(n)). El crear un nodo, al igual que crear el árbol, es O(1) por las mismas razones.
+
+Borrar: tiene una complejidad de O(log(n)) ya que tiene que buscar el lugar donde esta el nodo al eliminar, como dijimos antes esta operación es O(log(n)), al eliminar el nodo, el peor de los casos es que tenga dos hijos y se tenga que buscar el predecesor inorden, como es una busqueda es O(log(n)), y por último reorganizar los punteros que es O(1). Entonces es O(log(n)) + O(log(n)) + O(1), resultando en O(log(n)).
+
+Destruir: tiene una complejidad de O(n) ya que tenemos que recorrer todos los nodos del árbol, por lo que no podemos aprovechar la búsqueda binaria que ofrese la estructura. Tenemos que aclarar que estamos asumiendo que la función destrucción es O(1).
