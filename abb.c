@@ -200,9 +200,9 @@ size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array
 
     if(tamanio_array == 0) return 0;
 
-    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
+    *(array) = arbol_raiz(arbol);
 
-    *array = arbol_raiz(arbol);
+    nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
     size_t valor = arbol_recorrido_preorden(arbol, array+1, tamanio_array-1);
@@ -214,7 +214,7 @@ size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array
     tamanio_array -= valor;
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_preorden(arbol, array+1, tamanio_array-1);
+    size_t valor_dos = arbol_recorrido_preorden(arbol, array+(valor+1), tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
     return 1 + valor + valor_dos;
