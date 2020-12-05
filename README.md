@@ -75,3 +75,13 @@ Lo primero que hacemos es comprobar que el árbol sea valido. Después si el ár
 
 ### Funcion iterador interno
 Lo primero que hacemos es comprobar que el árbol y la función sean validas. Después dependiendo el recorrido, el orden en el que se llama con la rama izquierda, la derecha o la función que se nos pasa. 
+
+## Conceptos teóricos
+
+### Árbol binario de búsqueda y árbol binario
+
+#### Que es un árbol binario de búsqueda
+El árbol binario de búsqueda es un tipo de dato que aprovecha la busqueda binaria. Este árbol tiene la estructura de que cada nodo se divide en dos con la propiedad de los menores al nodo actual se situan a la izquierda, y los mayores a la derecha, por eso decimos que aprovecha la busqueda binaria.
+
+#### Diferencia con un árbol binario
+La diferencia principal es la propiedad con la que se ubican los elementos, donde los menores a la izquierda y los mayores a la derecha.
