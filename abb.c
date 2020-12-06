@@ -174,23 +174,23 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
-    size_t valor = arbol_recorrido_inorden(arbol, array, tamanio_array-1);
+    size_t rama_izq = arbol_recorrido_inorden(arbol, array, tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
-    *(array+valor) = arbol_raiz(arbol);
+    *(array+rama_izq) = arbol_raiz(arbol);
 
-    if (tamanio_array - valor < 1) {
+    if (tamanio_array - rama_izq < 1) {
         arbol->nodo_raiz = nodo_actual;
         return tamanio_array;
     }
 
-    tamanio_array -= valor;
+    tamanio_array -= rama_izq;
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_inorden(arbol, array+(valor+1), tamanio_array-1);
+    size_t rama_der = arbol_recorrido_inorden(arbol, array+(rama_izq+1), tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
-    return 1 + valor + valor_dos;
+    return 1 + rama_izq + rama_der;
 }
 
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array) {
@@ -205,19 +205,19 @@ size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
-    size_t valor = arbol_recorrido_preorden(arbol, array+1, tamanio_array-1);
+    size_t rama_izq = arbol_recorrido_preorden(arbol, array+1, tamanio_array-1);
 
-    if (tamanio_array - valor < 1) {
+    if (tamanio_array - rama_izq < 1) {
         arbol->nodo_raiz = nodo_actual;
         return tamanio_array;
     }
-    tamanio_array -= valor;
+    tamanio_array -= rama_izq;
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_preorden(arbol, array+(valor+1), tamanio_array-1);
+    size_t rama_der = arbol_recorrido_preorden(arbol, array+(rama_izq+1), tamanio_array-1);
 
     arbol->nodo_raiz = nodo_actual;
-    return 1 + valor + valor_dos;
+    return 1 + rama_izq + rama_der;
 }
 
 size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_array) {
@@ -230,21 +230,21 @@ size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_arra
     nodo_abb_t* nodo_actual = arbol->nodo_raiz;
 
     arbol->nodo_raiz = nodo_actual->izquierda;
-    size_t valor = arbol_recorrido_postorden(arbol, array, tamanio_array);
+    size_t rama_izq = arbol_recorrido_postorden(arbol, array, tamanio_array);
 
     arbol->nodo_raiz = nodo_actual->derecha;
-    size_t valor_dos = arbol_recorrido_postorden(arbol, array+valor, tamanio_array-valor);
+    size_t rama_der = arbol_recorrido_postorden(arbol, array+rama_izq, tamanio_array-rama_izq);
 
-    if (tamanio_array - (valor + valor_dos) < 1) {
+    if (tamanio_array - (rama_izq + rama_der) < 1) {
         arbol->nodo_raiz = nodo_actual;
         return tamanio_array;
     }
-    tamanio_array -= (valor + valor_dos);
+    tamanio_array -= (rama_izq + rama_der);
 
     arbol->nodo_raiz = nodo_actual;
-    *(array+(valor+valor_dos)) = arbol_raiz(arbol);
+    *(array+(rama_izq+rama_der)) = arbol_raiz(arbol);
 
-    return 1 + valor + valor_dos;
+    return 1 + rama_izq + rama_der;
 }
 
 /*
@@ -289,13 +289,13 @@ void arbol_destruir(abb_t* arbol) {
 size_t abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
     if (!nodo || !funcion) return 0;
 
-    size_t valor = abb_iterador_inorden(nodo->izquierda, funcion, extra);
+    size_t rama_izq = abb_iterador_inorden(nodo->izquierda, funcion, extra);
 
-    if (funcion(nodo->elemento, extra)) return 0;
+    if (funcion(nodo->elemento, extra)) return 1 + rama_izq;
 
-    size_t valor_dos = abb_iterador_inorden(nodo->derecha, funcion, extra);
-    
-    return 1 + valor + valor_dos;
+    size_t rama_der = abb_iterador_inorden(nodo->derecha, funcion, extra);
+
+    return 1 + rama_izq + rama_der;
 }
 
 /*
@@ -305,13 +305,13 @@ size_t abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), voi
 size_t abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
     if (!nodo || !funcion) return 0;
 
-    if (funcion(nodo->elemento, extra)) return 0;
+    if (funcion(nodo->elemento, extra)) return 1;
 
-    size_t valor = abb_iterador_preorden(nodo->izquierda, funcion, extra);
+    size_t rama_izq = abb_iterador_preorden(nodo->izquierda, funcion, extra);
 
-    size_t valor_dos = abb_iterador_preorden(nodo->derecha, funcion, extra);
+    size_t rama_der = abb_iterador_preorden(nodo->derecha, funcion, extra);
 
-    return 1 + valor + valor_dos;
+    return 1 + rama_izq + rama_der;
 }
 
 /*
@@ -321,17 +321,13 @@ size_t abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), vo
 size_t abb_iterador_postorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
     if (!nodo || !funcion) return 0;
 
-    size_t valor = 0, valor_dos = 0;
+    size_t rama_izq = abb_iterador_postorden(nodo->izquierda, funcion, extra);
 
-    if (nodo->izquierda)
-        valor = abb_iterador_postorden(nodo->izquierda, funcion, extra);
+    size_t rama_der = abb_iterador_postorden(nodo->derecha, funcion, extra);
 
-    if (nodo->derecha)
-        valor_dos = abb_iterador_postorden(nodo->derecha, funcion, extra);
+    if (funcion(nodo->elemento, extra)) return 1 + rama_izq + rama_der;
 
-    if (funcion(nodo->elemento, extra)) return 0;
-
-    return 1 + valor + valor_dos;
+    return 1 + rama_izq + rama_der;
 }
 
 size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra) {
