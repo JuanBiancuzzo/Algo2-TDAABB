@@ -286,62 +286,79 @@ void arbol_destruir(abb_t* arbol) {
  * Itera todo el arbol, de la forma voy a la izquierda, después en el que estoy y
  * por ultimo a la derecha
  */
-size_t abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
-    if (!nodo || !funcion) return 0;
+bool abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra, size_t* contador) {
+    if (!nodo || !funcion) return true;
 
-    size_t rama_izq = abb_iterador_inorden(nodo->izquierda, funcion, extra);
+    bool rama_der = true, rama_izq = true;
 
-    if (funcion(nodo->elemento, extra)) return 1 + rama_izq;
+    rama_izq = abb_iterador_inorden(nodo->izquierda, funcion, extra, contador);
 
-    size_t rama_der = abb_iterador_inorden(nodo->derecha, funcion, extra);
+    if (rama_izq) (*contador)++;
 
-    return 1 + rama_izq + rama_der;
+    if (funcion(nodo->elemento, extra)) return false;
+
+    if (rama_izq)
+        rama_der = abb_iterador_inorden(nodo->derecha, funcion, extra, contador);
+
+    return rama_izq && rama_der;
 }
 
 /*
  * Itera todo el arbol, de la forma primero en el que estoy, después voy a la
  * izquierda y por ultimo a la derecha
- */
-size_t abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
-    if (!nodo || !funcion) return 0;
+*/
+bool abb_iterador_preorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra, size_t* contador) {
+    if (!nodo || !funcion) return true;
 
-    if (funcion(nodo->elemento, extra)) return 1;
+    bool rama_izq = true, rama_der = true;
 
-    size_t rama_izq = abb_iterador_preorden(nodo->izquierda, funcion, extra);
+    (*contador)++;
+    if (funcion(nodo->elemento, extra)) return false;
 
-    size_t rama_der = abb_iterador_preorden(nodo->derecha, funcion, extra);
+    rama_izq = abb_iterador_preorden(nodo->izquierda, funcion, extra, contador);
 
-    return 1 + rama_izq + rama_der;
+    if (rama_izq)
+        rama_der = abb_iterador_preorden(nodo->derecha, funcion, extra, contador);
+
+    return rama_izq && rama_der;
 }
 
 /*
  * Itera todo el arbol, de la forma voy a la izquierda, después a la derecha y
  * por ultimo en el que estoy
  */
-size_t abb_iterador_postorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra) {
-    if (!nodo || !funcion) return 0;
+bool abb_iterador_postorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void* extra, size_t* contador) {
+    if (!nodo || !funcion) return true;
 
-    size_t rama_izq = abb_iterador_postorden(nodo->izquierda, funcion, extra);
+    bool rama_izq = true, rama_der = true;
 
-    size_t rama_der = abb_iterador_postorden(nodo->derecha, funcion, extra);
+    rama_izq = abb_iterador_postorden(nodo->izquierda, funcion, extra, contador);
 
-    if (funcion(nodo->elemento, extra)) return 1 + rama_izq + rama_der;
+    if (rama_izq)
+        rama_der = abb_iterador_postorden(nodo->derecha, funcion, extra, contador);
 
-    return 1 + rama_izq + rama_der;
+    if (rama_izq && rama_der)
+        (*contador)++;
+
+    if (funcion(nodo->elemento, extra)) return false;
+
+    return rama_izq && rama_der;
 }
 
 size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra) {
 
     if (!arbol || !funcion) return 0;
 
+    size_t contador = 0;
+
     if (recorrido == ABB_RECORRER_INORDEN)
-        return abb_iterador_inorden(arbol->nodo_raiz, funcion, extra);
+        abb_iterador_inorden(arbol->nodo_raiz, funcion, extra, &contador);
 
-    if (recorrido == ABB_RECORRER_PREORDEN)
-        return abb_iterador_preorden(arbol->nodo_raiz, funcion, extra);
+    else if (recorrido == ABB_RECORRER_PREORDEN)
+        abb_iterador_preorden(arbol->nodo_raiz, funcion, extra, &contador);
 
-    if (recorrido == ABB_RECORRER_POSTORDEN)
-        return abb_iterador_postorden(arbol->nodo_raiz, funcion, extra);
+    else if (recorrido == ABB_RECORRER_POSTORDEN)
+        abb_iterador_postorden(arbol->nodo_raiz, funcion, extra, &contador);
 
-    return 0;
+    return contador;
 }
