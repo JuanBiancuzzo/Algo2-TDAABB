@@ -293,12 +293,13 @@ bool abb_iterador_inorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), void*
 
     rama_izq = abb_iterador_inorden(nodo->izquierda, funcion, extra, contador);
 
-    if (rama_izq) (*contador)++;
+    if (rama_izq) {
+        (*contador)++;
 
-    if (funcion(nodo->elemento, extra)) return false;
+        if (funcion(nodo->elemento, extra)) return false;
 
-    if (rama_izq)
         rama_der = abb_iterador_inorden(nodo->derecha, funcion, extra, contador);
+    }
 
     return rama_izq && rama_der;
 }
@@ -340,7 +341,8 @@ bool abb_iterador_postorden(nodo_abb_t* nodo, bool (*funcion)(void*, void*), voi
     if (rama_izq && rama_der)
         (*contador)++;
 
-    if (funcion(nodo->elemento, extra)) return false;
+    if (rama_izq && rama_der)
+        if (funcion(nodo->elemento, extra)) return false;
 
     return rama_izq && rama_der;
 }
